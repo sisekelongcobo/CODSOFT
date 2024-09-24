@@ -68,5 +68,5 @@ jobs:
         with:
           app-name: 'codsoft'
           slot-name: 'Production'
-          package: .
+          package: job_board/backend
           
