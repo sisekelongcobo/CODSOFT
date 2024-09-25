@@ -4,10 +4,8 @@ import { SearchBar } from '../../components/SearchBar';
 import { FeaturedJobs } from './FeaturedJobs';
 
 export const HomePage: React.FC = () => {
-  // Create a ref for the FeaturedJobs section
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
 
-  // Function to scroll to the FeaturedJobs section
   const handleExploreClick = () => {
     if (featuredJobsRef.current) {
       featuredJobsRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -54,8 +52,8 @@ export const HomePage: React.FC = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Adjust the opacity for darkness
-            zIndex: 1, // Ensure this is above the video
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            zIndex: 1, 
           }}
         />
         <Box sx={{ zIndex: 2 }}>

@@ -1,19 +1,19 @@
 import React from 'react';
 import { Card, CardContent, Typography, Button, Box } from '@mui/material';
-
-interface Job {
-  id: number;
-  title: string;
-  company: string;
-  location: string;
-  postedDate: string;
-}
+import { Job } from '../../interface';
+import { useNavigate } from 'react-router-dom';
 
 interface JobCardProps {
   job: Job;
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job }) => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate('/job-details', { state: { job } });
+  };
+
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <CardContent>
@@ -29,9 +29,12 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
         <Typography variant="caption" color="text.secondary">
           Posted: {job.postedDate}
         </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {job.jobType} - {job.workMode}
+        </Typography>
       </CardContent>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" color="primary" size="small">
+      <Box sx={{ p: 2, display: 'flex' }}>
+        <Button variant="outlined" color="primary" size="small" onClick={handleViewDetails}>
           View Details
         </Button>
       </Box>

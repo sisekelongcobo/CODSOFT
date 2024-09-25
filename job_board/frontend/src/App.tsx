@@ -5,6 +5,8 @@ import { SignUpPage } from "./pages/auth/sign-up";
 import { HomePage } from "./pages/home/HomePage";
 import { JobListingsPage } from "./pages/job-listing/JobListingsPage";
 import { Layout } from "./components/Layout";
+import { JobDetailPage } from "./pages/job-listing/JobDetails";
+import {EmployerDashboard}  from "./pages/dashboard/EmployerDashboard";
 
 function App() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -24,6 +26,8 @@ function App() {
           {isSignedIn && 
             <>
               <Route path="/job-listings" element={<JobListingsPage/>} />
+              <Route path="/job-details" element={<JobDetailPage/>} />
+              <Route path="/employer-dashboard" element={<EmployerDashboard/>} />
             </>
           }
 
