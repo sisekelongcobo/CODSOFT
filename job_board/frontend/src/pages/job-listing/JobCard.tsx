@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, Typography, Button, Box } from '@mui/material';
-import { Job } from '../../interface';
-import { useNavigate } from 'react-router-dom';
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Job } from "../../interface";
 
 interface JobCardProps {
   job: Job;
@@ -11,13 +11,20 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    navigate('/job-details', { state: { job } });
+    navigate("/job-details", { state: { job } });
   };
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <Card
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       <CardContent>
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {job.title}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
@@ -33,7 +40,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
           {job.jobType} - {job.workMode}
         </Typography>
       </CardContent>
-      <Box sx={{ p: 2, display: 'flex' }}>
+      <Box sx={{ p: 2, display: "flex" }}>
         <Button variant="outlined" color="primary" size="small" onClick={handleViewDetails}>
           View Details
         </Button>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { Box, Button, TextField } from "@mui/material";
+import React from "react";
 
 export const SearchBar: React.FC = () => {
   return (
@@ -7,7 +7,7 @@ export const SearchBar: React.FC = () => {
       <TextField
         label="Search for jobs..."
         variant="outlined"
-        sx={{ width: '60%', boxShadow: 1 }}
+        sx={{ width: "60%", boxShadow: 1 }}
       />
       <Button variant="contained" color="primary" sx={{ ml: 2, py: 1.5, px: 4 }}>
         Search

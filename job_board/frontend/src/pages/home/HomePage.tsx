@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
-import { Typography, Button, Grid, Paper, Box, Container } from '@mui/material';
-import { SearchBar } from '../../components/SearchBar';
-import { FeaturedJobs } from './FeaturedJobs';
+import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import React, { useRef } from "react";
+import { SearchBar } from "../../components/SearchBar";
+import { FeaturedJobs } from "./FeaturedJobs";
 
 export const HomePage: React.FC = () => {
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
 
   const handleExploreClick = () => {
     if (featuredJobsRef.current) {
-      featuredJobsRef.current.scrollIntoView({ behavior: 'smooth' });
+      featuredJobsRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -16,16 +16,16 @@ export const HomePage: React.FC = () => {
     <>
       <Box
         sx={{
-          position: 'relative',
-          height: '100vh',
+          position: "relative",
+          height: "100vh",
           backgroundImage: 'url("/path-to-banner-image.jpg")',
-          backgroundSize: 'cover',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          textAlign: 'center',
-          backgroundPosition: 'center',
+          backgroundSize: "cover",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "white",
+          textAlign: "center",
+          backgroundPosition: "center",
         }}
       >
         <video
@@ -33,10 +33,10 @@ export const HomePage: React.FC = () => {
           loop
           muted
           style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
             top: 0,
             left: 0,
             zIndex: -1, // Push the video behind the content
@@ -47,13 +47,13 @@ export const HomePage: React.FC = () => {
         </video>
         <Box
           sx={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            zIndex: 1, 
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            zIndex: 1,
           }}
         />
         <Box sx={{ zIndex: 2 }}>
@@ -85,18 +85,21 @@ export const HomePage: React.FC = () => {
 
       <Container sx={{ mt: 8, mb: 8 }}>
         <Grid container spacing={4}>
-          {['Wide Range of Jobs', 'Easy to Apply', 'Post Jobs in Minutes'].map((benefit, index) => (
+          {["Wide Range of Jobs", "Easy to Apply", "Post Jobs in Minutes"].map((benefit, index) => (
             <Grid item xs={12} md={4} key={index}>
-              <Paper elevation={3} sx={{ p: 4, textAlign: 'center', backgroundColor: '#fafafa', height: '10rem' }}>
+              <Paper
+                elevation={3}
+                sx={{ p: 4, textAlign: "center", backgroundColor: "#fafafa", height: "10rem" }}
+              >
                 <Typography variant="h6" sx={{ mb: 2 }}>
                   {benefit}
                 </Typography>
                 <Typography>
-                  {benefit === 'Wide Range of Jobs'
-                    ? 'We offer a diverse range of job listings across various industries and locations.'
-                    : benefit === 'Easy to Apply'
-                    ? 'Apply to jobs quickly and easily with our streamlined application process.'
-                    : 'Employers can post job openings in just a few simple steps, making it easier to find the right candidates.'}
+                  {benefit === "Wide Range of Jobs"
+                    ? "We offer a diverse range of job listings across various industries and locations."
+                    : benefit === "Easy to Apply"
+                      ? "Apply to jobs quickly and easily with our streamlined application process."
+                      : "Employers can post job openings in just a few simple steps, making it easier to find the right candidates."}
                 </Typography>
               </Paper>
             </Grid>
@@ -104,7 +107,7 @@ export const HomePage: React.FC = () => {
         </Grid>
       </Container>
 
-      <Box sx={{ backgroundColor: '#f5f5f5', py: 6, textAlign: 'center' }}>
+      <Box sx={{ backgroundColor: "#f5f5f5", py: 6, textAlign: "center" }}>
         <Typography variant="h4" gutterBottom>
           Are you an Employer?
         </Typography>

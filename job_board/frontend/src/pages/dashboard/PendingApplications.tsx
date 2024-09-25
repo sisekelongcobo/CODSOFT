@@ -55,6 +55,7 @@ export const PendingApplications: React.FC = () => {
         count={Math.ceil(mockApplications.length / rowsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
+        color="primary"
         sx={{ marginTop: 2, justifyContent: 'center', display: 'flex' }}
       />
     </Box>

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Container, Grid, Typography, Box, Pagination } from '@mui/material';
-import {SearchBar} from '../../components/SearchBar';
-import { JobCard } from './JobCard';
+import { Box, Container, Grid, Pagination, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { SearchBar } from "../../components/SearchBar";
+import { JobCard } from "./JobCard";
 
 const jobs = [
   {
@@ -12,8 +12,10 @@ const jobs = [
     postedDate: "2 days ago",
     jobType: "Full-time",
     workMode: "Hybrid",
-    companyDescription: "Tech Corp is a leading technology company focused on delivering innovative solutions. We value creativity, collaboration, and excellence.",
-    roleDescription: "As a Software Engineer, you will design and develop software applications. Collaborating with a dynamic team, you will create high-quality products.",
+    companyDescription:
+      "Tech Corp is a leading technology company focused on delivering innovative solutions. We value creativity, collaboration, and excellence.",
+    roleDescription:
+      "As a Software Engineer, you will design and develop software applications. Collaborating with a dynamic team, you will create high-quality products.",
     description: `We are looking for a skilled Software Engineer to join our team. 
       The successful candidate will work on developing high-quality applications 
       and collaborate with other developers, designers, and product managers.`,
@@ -38,8 +40,10 @@ const jobs = [
     postedDate: "1 week ago",
     jobType: "Contract",
     workMode: "Remote",
-    companyDescription: "Creative Agency is a top marketing agency known for developing cutting-edge marketing strategies for various clients.",
-    roleDescription: "The Marketing Specialist will work on campaigns to drive brand awareness and engagement for our clients. You’ll be involved in content creation and strategy.",
+    companyDescription:
+      "Creative Agency is a top marketing agency known for developing cutting-edge marketing strategies for various clients.",
+    roleDescription:
+      "The Marketing Specialist will work on campaigns to drive brand awareness and engagement for our clients. You’ll be involved in content creation and strategy.",
     description: `We are seeking a creative Marketing Specialist to develop 
       innovative marketing strategies and campaigns for a diverse portfolio of clients.`,
     responsibilities: [
@@ -63,8 +67,10 @@ const jobs = [
     postedDate: "3 days ago",
     jobType: "Full-time",
     workMode: "Onsite",
-    companyDescription: "Startup Inc. is a fast-growing company focused on delivering innovative products to solve real-world problems.",
-    roleDescription: "The Product Manager will be responsible for guiding the development of new products from concept to launch, working closely with engineering and marketing teams.",
+    companyDescription:
+      "Startup Inc. is a fast-growing company focused on delivering innovative products to solve real-world problems.",
+    roleDescription:
+      "The Product Manager will be responsible for guiding the development of new products from concept to launch, working closely with engineering and marketing teams.",
     description: `We are looking for an experienced Product Manager to oversee 
       product development, ensuring alignment with business goals and market needs.`,
     responsibilities: [
@@ -88,8 +94,10 @@ const jobs = [
     postedDate: "4 days ago",
     jobType: "Full-time",
     workMode: "Remote",
-    companyDescription: "Big Data Analytics is a global leader in data science, offering data-driven solutions to help businesses make informed decisions.",
-    roleDescription: "The Data Scientist will apply machine learning techniques to analyze large datasets and generate actionable insights for business improvement.",
+    companyDescription:
+      "Big Data Analytics is a global leader in data science, offering data-driven solutions to help businesses make informed decisions.",
+    roleDescription:
+      "The Data Scientist will apply machine learning techniques to analyze large datasets and generate actionable insights for business improvement.",
     description: `We are seeking a talented Data Scientist to work with large datasets, 
       applying statistical models and machine learning algorithms to solve complex business problems.`,
     responsibilities: [
@@ -113,8 +121,10 @@ const jobs = [
     postedDate: "5 days ago",
     jobType: "Contract",
     workMode: "Hybrid",
-    companyDescription: "DesignPro Studio is a design consultancy that specializes in creating user-centered interfaces for mobile and web applications.",
-    roleDescription: "The UI/UX Designer will create intuitive and aesthetically pleasing user interfaces while ensuring a seamless user experience.",
+    companyDescription:
+      "DesignPro Studio is a design consultancy that specializes in creating user-centered interfaces for mobile and web applications.",
+    roleDescription:
+      "The UI/UX Designer will create intuitive and aesthetically pleasing user interfaces while ensuring a seamless user experience.",
     description: `We are looking for a creative UI/UX Designer to collaborate 
       with developers and clients to design cutting-edge digital experiences.`,
     responsibilities: [
@@ -138,8 +148,10 @@ const jobs = [
     postedDate: "1 week ago",
     jobType: "Full-time",
     workMode: "Onsite",
-    companyDescription: "Cloud Solutions is a leader in cloud computing services, helping businesses transition to scalable and secure cloud infrastructures.",
-    roleDescription: "As a DevOps Engineer, you will manage the cloud infrastructure, automate deployments, and ensure the reliability of production environments.",
+    companyDescription:
+      "Cloud Solutions is a leader in cloud computing services, helping businesses transition to scalable and secure cloud infrastructures.",
+    roleDescription:
+      "As a DevOps Engineer, you will manage the cloud infrastructure, automate deployments, and ensure the reliability of production environments.",
     description: `We are seeking a DevOps Engineer to maintain and optimize 
       our cloud infrastructure, focusing on automation, monitoring, and security.`,
     responsibilities: [
@@ -163,8 +175,10 @@ const jobs = [
     postedDate: "1 day ago",
     jobType: "Full-time",
     workMode: "Hybrid",
-    companyDescription: "FinGroup is a leading financial services company that provides investment advice and risk management solutions.",
-    roleDescription: "The Financial Analyst will analyze financial data, prepare reports, and provide recommendations to improve business performance.",
+    companyDescription:
+      "FinGroup is a leading financial services company that provides investment advice and risk management solutions.",
+    roleDescription:
+      "The Financial Analyst will analyze financial data, prepare reports, and provide recommendations to improve business performance.",
     description: `We are looking for a Financial Analyst to assess business performance 
       and provide actionable insights to drive financial success.`,
     responsibilities: [
@@ -188,8 +202,10 @@ const jobs = [
     postedDate: "2 weeks ago",
     jobType: "Full-time",
     workMode: "Onsite",
-    companyDescription: "Logistics World provides comprehensive logistics and supply chain solutions to clients across various industries.",
-    roleDescription: "The Operations Manager will oversee daily operations, manage supply chain logistics, and ensure the efficient flow of goods and services.",
+    companyDescription:
+      "Logistics World provides comprehensive logistics and supply chain solutions to clients across various industries.",
+    roleDescription:
+      "The Operations Manager will oversee daily operations, manage supply chain logistics, and ensure the efficient flow of goods and services.",
     description: `We are looking for an experienced Operations Manager to manage 
       logistics and supply chain operations, ensuring timely delivery of goods.`,
     responsibilities: [
@@ -213,8 +229,10 @@ const jobs = [
     postedDate: "3 days ago",
     jobType: "Full-time",
     workMode: "Hybrid",
-    companyDescription: "PeopleFirst is a HR consulting firm specializing in employee relations, talent acquisition, and workplace culture enhancement.",
-    roleDescription: "The HR Manager will manage recruitment, employee relations, and performance management to ensure a positive work environment.",
+    companyDescription:
+      "PeopleFirst is a HR consulting firm specializing in employee relations, talent acquisition, and workplace culture enhancement.",
+    roleDescription:
+      "The HR Manager will manage recruitment, employee relations, and performance management to ensure a positive work environment.",
     description: `We are seeking an HR Manager to lead our human resources department, 
       focusing on recruitment, employee relations, and enhancing workplace culture.`,
     responsibilities: [
@@ -229,9 +247,8 @@ const jobs = [
       "Strong communication and leadership skills",
       "Knowledge of labor laws and HR policies",
     ],
-  }
+  },
 ];
-
 
 const jobsPerPage = 6;
 
@@ -250,9 +267,9 @@ export const JobListingsPage: React.FC = () => {
   return (
     <>
       <Container sx={{ mt: 4 }}>
-        <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 4, textAlign: 'center' }}>
+        <Typography variant="h2" sx={{ fontWeight: "bold", mb: 4, textAlign: "center" }}>
           Job Listings
-        </Typography> 
+        </Typography>
         <Box sx={{ mb: 4 }}>
           <SearchBar />
         </Box>
@@ -265,11 +282,11 @@ export const JobListingsPage: React.FC = () => {
           ))}
         </Grid>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
           <Pagination
-            count={Math.ceil(jobs.length / jobsPerPage)} 
-            page={currentPage} 
-            onChange={handlePageChange} 
+            count={Math.ceil(jobs.length / jobsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
             color="primary"
           />
         </Box>

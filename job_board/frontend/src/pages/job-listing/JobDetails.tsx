@@ -1,8 +1,7 @@
 import { Box, Button, Card, CardContent, Container, Typography } from "@mui/material";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Job } from "../../interface";
-import { useLocation } from "react-router-dom";
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,9 +10,9 @@ export const JobDetailPage: React.FC = () => {
 
   const { job } = location.state as { job: Job };
   let jobDetails: Job = job;
-  
+
   console.log(jobDetails);
-  
+
   const handleApply = () => {
     alert("Navigate to the application form for job ID: " + id);
   };

@@ -165,6 +165,7 @@ export const EmployerDashboard: React.FC = () => {
         count={Math.ceil(mockJobs.length / jobsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
+        color="primary"
         sx={{ marginTop: 2, justifyContent: 'center', display: 'flex' }}
       />
 
