@@ -1,8 +1,10 @@
 import { useAuth } from "@clerk/clerk-react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import SignInPage from "./pages/sign-in";
-import SignUpPage from "./pages/sign-up";
-import Dashboard from "./pages/dash";
+import { SignInPage } from "./pages/auth/sign-in";
+import { SignUpPage } from "./pages/auth/sign-up";
+import { HomePage } from "./pages/home/HomePage";
+import { JobListingsPage } from "./pages/job-listing/JobListingsPage";
+import { Layout } from "./components/Layout";
 
 function App() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -13,20 +15,27 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
+      <Layout>
+        <Routes>
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/home" element={<HomePage/>} />
 
-        {isSignedIn && <Route path="/dashboard" element={<Dashboard/>} />}
-
-        <Route
-          path="/"
-          element={
-            isSignedIn ? <Navigate to={"/dashboard"} /> : <Navigate to={"/sign-in"} />
+          {isSignedIn && 
+            <>
+              <Route path="/job-listings" element={<JobListingsPage/>} />
+            </>
           }
-        />
-        <Route path="*" element={<>No Route Found</>} />
-      </Routes>
+
+          <Route
+            path="/"
+            element={
+              isSignedIn ? <Navigate to={"/home"} /> : <Navigate to={"/sign-in"} />
+            }
+          />
+          <Route path="*" element={<>No Route Found</>} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }
