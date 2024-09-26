@@ -10,6 +10,7 @@ const mockAppliedJobs = [
 
 export const CandidateDashboard: React.FC = () => {
   const navigate = useNavigate();
+  //@ts-ignore
   const [appliedJobs, setAppliedJobs] = useState(mockAppliedJobs);
 
   const handleViewJob = (id: number) => {
