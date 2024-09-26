@@ -17,9 +17,10 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.44",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "mysql2": "^3.11.0"
   }
 }

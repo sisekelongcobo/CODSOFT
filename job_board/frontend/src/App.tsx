@@ -3,7 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { SignInPage } from "./pages/auth/sign-in";
 import { SignUpPage } from "./pages/auth/sign-up";
+import { CandidateProfileUpdate } from "./pages/profileUpdate/CandidateProfileUpdate";
 import { EmployerDashboard } from "./pages/dashboard/EmployerDashboard";
+import { CandidateDashboard } from "./pages/dashboard/UserDashboard";
 import { HomePage } from "./pages/home/HomePage";
 import { JobDetailPage } from "./pages/job-listing/JobDetails";
 import { JobListingsPage } from "./pages/job-listing/JobListingsPage";
@@ -28,6 +30,8 @@ function App() {
               <Route path="/job-listings" element={<JobListingsPage />} />
               <Route path="/job-details" element={<JobDetailPage />} />
               <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+              <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
+              <Route path="/update-profile" element={<CandidateProfileUpdate />} />
             </>
           )}
 

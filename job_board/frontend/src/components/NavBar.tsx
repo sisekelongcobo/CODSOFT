@@ -1,4 +1,4 @@
-import { SignOutButton, useAuth, useUser } from "@clerk/clerk-react";
+import { SignOutButton, useAuth } from "@clerk/clerk-react";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
@@ -13,15 +13,37 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme from "../theme";
 
 export const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
-  const { user } = useUser();
+  const [user, setUser] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState(false); 
+
+  const fetchUser = () => {
+    const url = import.meta.env.VITE_API_URL + "/users/user-data";
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data);
+      })
+      .catch((error) => console.error("Error fetching user data:", error)); // Handle errors
+  };
+
+  useEffect(() => {
+    if (isSignedIn) {
+      fetchUser(); // Fetch user data if signed in
+    }
+  }, [isSignedIn]); // Run effect when isSignedIn changes
 
   const handleLoginClick = () => {
     navigate("/sign-in");
@@ -44,7 +66,6 @@ export const NavBar: React.FC = () => {
             JobBoard
           </Typography>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {" "}
             {["Home", "Job Listings", "Employer Dashboard", "Candidate Dashboard"].map((menu) => (
               <Button
                 key={menu}
@@ -55,7 +76,7 @@ export const NavBar: React.FC = () => {
                 {menu}
               </Button>
             ))}
-            {isSignedIn && <Avatar src={user?.imageUrl} />}
+            {isSignedIn && user && <Avatar src={user.imageUrl} alt={user.fullName} />} {/* Display user avatar */}
           </Box>
           <IconButton
             edge="end"

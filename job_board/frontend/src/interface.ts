@@ -8,7 +8,12 @@ export interface Job {
   workMode: string; // e.g., Onsite, Remote, Hybrid
   companyDescription: string;
   roleDescription: string;
-  description: string;
+  jobDescription: string;
   responsibilities: string[];
   requirements: string[];
+  createdAt: string;
+}
+
+export interface JobCardProps {
+  job: Job;
 }

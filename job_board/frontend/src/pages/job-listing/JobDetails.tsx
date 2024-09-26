@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, Container, Typography } from "@mui/mate
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Job } from "../../interface";
+import TimeAgo from "../../components/TimeAgo";
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -10,8 +11,6 @@ export const JobDetailPage: React.FC = () => {
 
   const { job } = location.state as { job: Job };
   let jobDetails: Job = job;
-
-  console.log(jobDetails);
 
   const handleApply = () => {
     alert("Navigate to the application form for job ID: " + id);
@@ -32,7 +31,7 @@ export const JobDetailPage: React.FC = () => {
             color="text.secondary"
             sx={{ mb: 2, textAlign: "center" }}
           >
-            Posted: {jobDetails.postedDate} | Type: {jobDetails.jobType} | Work Mode:{" "}
+            Posted: <TimeAgo timestamp={job.createdAt}/> | Type: {jobDetails.jobType} | Work Mode:{" "}
             {jobDetails.workMode}
           </Typography>
 
@@ -54,7 +53,7 @@ export const JobDetailPage: React.FC = () => {
             <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
               Job Description
             </Typography>
-            <Typography variant="body1">{jobDetails.description}</Typography>
+            <Typography variant="body1">{jobDetails.jobDescription}</Typography>
           </Box>
 
           <Box sx={{ mb: 4, p: 2 }}>
@@ -84,10 +83,10 @@ export const JobDetailPage: React.FC = () => {
           </Box>
 
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-            <Button variant="outlined" onClick={() => navigate("/job-listings")}>
-              Back to Job Listings
+            <Button variant="outlined" onClick={() => navigate(-1)}>
+              Back to Previous Page
             </Button>
-            <Button variant="contained" color="primary" onClick={handleApply}>
+            <Button variant="contained" color="primary" sx={{color: 'white'}} onClick={handleApply}>
               Apply Now
             </Button>
           </Box>

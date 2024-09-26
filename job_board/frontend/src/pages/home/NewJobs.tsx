@@ -1,18 +1,19 @@
 import { Box, Button, Card, CardContent, Grid, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import TimeAgo from "../../components/TimeAgo";
 import { Job } from "../../interface";
 
 const jobsPerPage = 3;
 
-export const FeaturedJobs: React.FC = () => {
-  const [postedJobs, setPostedJobs] = React.useState<any[]>([]);
+export const NewJobs: React.FC = () => {
+  const [postedJobs, setPostedJobs] = useState<Job[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = postedJobs?.slice(indexOfFirstJob, indexOfLastJob);
-  let jobCount = postedJobs?.length ?? 0;
   const navigate = useNavigate();
+  const jobCount = postedJobs?.length ?? 0;
 
   //@ts-ignore
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -20,7 +21,7 @@ export const FeaturedJobs: React.FC = () => {
   };
 
   const fetchJobs = () => {
-    const url = import.meta.env.VITE_API_URL + "/jobs/all-jobs";
+    const url = import.meta.env.VITE_API_URL + "/jobs/new-jobs";
     fetch(url, {
       method: "GET",
       headers: {
@@ -32,7 +33,7 @@ export const FeaturedJobs: React.FC = () => {
       .then((data) => {
         setPostedJobs(data);
       })
-      .catch((error) => console.error("Error fetching user data:", error)); // Handle errors
+      .catch((error) => console.error("Error fetching job data:", error));
   };
 
   useEffect(() => {
@@ -46,14 +47,14 @@ export const FeaturedJobs: React.FC = () => {
   return (
     <>
       <Grid container spacing={4}>
-        {currentJobs.map((job, index) => (
-          <Grid item xs={12} md={4} key={index}>
+        {currentJobs.map((job) => (
+          <Grid item xs={12} md={4} key={job.id}>
             <Card
               sx={{
                 boxShadow: 3,
                 ":hover": { boxShadow: 6 },
                 transition: "box-shadow 0.3s",
-                height: "12rem",
+                height: "14rem",
               }}
             >
               <CardContent>
@@ -65,7 +66,7 @@ export const FeaturedJobs: React.FC = () => {
                   {job.location}
                 </Typography>
                 <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-                  {job.jobType} - {job.workMode}
+                  Posted <TimeAgo timestamp={job.createdAt} />
                 </Typography>
                 <Button
                   variant="outlined"

@@ -1,11 +1,8 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Job } from "../../interface";
-
-interface JobCardProps {
-  job: Job;
-}
+import TimeAgo from "../../components/TimeAgo";
+import { JobCardProps } from "../../interface";
 
 export const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const navigate = useNavigate();
@@ -34,7 +31,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job }) => {
           {job.location}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          Posted: {job.postedDate}
+          Posted: <TimeAgo timestamp={job.createdAt} />
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {job.jobType} - {job.workMode}

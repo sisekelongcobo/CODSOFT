@@ -1,7 +1,7 @@
 import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import React, { useRef } from "react";
-import { SearchBar } from "../../components/SearchBar";
 import { FeaturedJobs } from "./FeaturedJobs";
+import { NewJobs } from "./NewJobs";
 
 export const HomePage: React.FC = () => {
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
@@ -64,7 +64,7 @@ export const HomePage: React.FC = () => {
             variant="contained"
             color="primary"
             size="large"
-            sx={{ mt: 4, py: 1.5, px: 4 }}
+            sx={{ mt: 4, py: 1.5, px: 4, color: "white" }}
             onClick={handleExploreClick}
           >
             Explore Jobs
@@ -72,15 +72,17 @@ export const HomePage: React.FC = () => {
         </Box>
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        <SearchBar />
-      </Box>
-
-      <Container ref={featuredJobsRef} sx={{ mt: 8 }}>
-        <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+      <Container ref={featuredJobsRef} sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
           Featured Jobs
         </Typography>
         <FeaturedJobs />
+      </Container>
+      <Container sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
+          New Jobs
+        </Typography>
+        <NewJobs />
       </Container>
 
       <Container sx={{ mt: 8, mb: 8 }}>
@@ -114,7 +116,12 @@ export const HomePage: React.FC = () => {
         <Typography variant="subtitle1" gutterBottom>
           Post your job openings and find the best candidates today.
         </Typography>
-        <Button variant="contained" color="primary" size="large" sx={{ mt: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          sx={{ mt: 3, color: "white" }}
+        >
           Post a Job Now
         </Button>
       </Box>
