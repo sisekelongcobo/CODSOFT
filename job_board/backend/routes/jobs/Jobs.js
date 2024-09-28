@@ -3,11 +3,10 @@ import express from "express";
 
 const router = express.Router();
 
-// router.use(ClerkExpressRequireAuth());
+router.use(ClerkExpressRequireAuth());
 
 router.get("/all-jobs", async (req, res, next) => {
   try {
-    
     req.db.query("SELECT * FROM jobs", (err, result) => {
       if (err) return next(err);
 
@@ -20,7 +19,6 @@ router.get("/all-jobs", async (req, res, next) => {
 
 router.get("/new-jobs", async (req, res, next) => {
   try {
-    
     req.db.query(
       "SELECT * FROM jobs WHERE createdAt > DATE_SUB(NOW(), INTERVAL 5 DAY)",
       (err, result) => {
@@ -36,7 +34,6 @@ router.get("/new-jobs", async (req, res, next) => {
 
 router.post("/add-job", async (req, res, next) => {
   try {
-
     const {
       title,
       company,
@@ -48,7 +45,7 @@ router.post("/add-job", async (req, res, next) => {
       roleDescription,
       jobDescription,
       responsibilities,
-      requirements
+      requirements,
     } = req.body;
 
     // Ensure all required fields are provided
@@ -73,7 +70,7 @@ router.post("/add-job", async (req, res, next) => {
       roleDescription,
       jobDescription,
       JSON.stringify(responsibilities), // Convert JSON object to string
-      JSON.stringify(requirements) // Convert JSON object to string
+      JSON.stringify(requirements), // Convert JSON object to string
     ];
 
     req.db.query(query, values, (err, result) => {

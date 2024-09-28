@@ -7,8 +7,7 @@ router.use(ClerkExpressRequireAuth());
 router.get("/user-data", async (req, res, next) => {
   try {
     const { userId } = req.auth;
-    console.log(userId);
-    
+
     const user = await clerkClient.users.getUser(userId);
     const fullName = user.fullName || user.firstName || "Unknown";
     const imageUrl = user.imageUrl;

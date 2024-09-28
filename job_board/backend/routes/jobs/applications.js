@@ -7,6 +7,7 @@ router.use(ClerkExpressRequireAuth());
 router.get("/applications", async (req, res, next) => {
   try {
     const { userId } = req.auth;
+    console.log(userId);
 
     const query = `
         SELECT 
