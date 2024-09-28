@@ -1,10 +1,12 @@
-function App() {
+import "./App.css";
+import { ZumaBiography } from "./ZumaBiography";
 
+function App() {
   return (
-    <>
-      Welcome
-    </>
-  )
+    <div>
+      <ZumaBiography />
+    </div>
+  );
 }
 
-export default App
+export default App;
