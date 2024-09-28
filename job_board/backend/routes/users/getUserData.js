@@ -1,8 +1,6 @@
-import { clerkClient, ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import express from "express";
 const router = express.Router();
-
-router.use(ClerkExpressRequireAuth());
 
 router.get("/user-data", async (req, res, next) => {
   try {

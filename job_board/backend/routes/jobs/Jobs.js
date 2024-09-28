@@ -3,8 +3,6 @@ import express from "express";
 
 const router = express.Router();
 
-router.use(ClerkExpressRequireAuth());
-
 router.get("/all-jobs", async (req, res, next) => {
   try {
     req.db.query("SELECT * FROM jobs", (err, result) => {
@@ -32,7 +30,7 @@ router.get("/new-jobs", async (req, res, next) => {
   }
 });
 
-router.post("/add-job", async (req, res, next) => {
+router.post("/add-job", ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
     const {
       title,

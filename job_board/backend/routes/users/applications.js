@@ -1,8 +1,6 @@
-import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 
 const router = express.Router();
-router.use(ClerkExpressRequireAuth());
 
 // Route to get all applications for a user and join with jobs table to get job title and company
 router.get("/applications", async (req, res, next) => {

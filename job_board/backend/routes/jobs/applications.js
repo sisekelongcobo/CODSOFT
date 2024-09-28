@@ -1,13 +1,10 @@
-import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 
 const router = express.Router();
-router.use(ClerkExpressRequireAuth());
 
 router.get("/applications", async (req, res, next) => {
   try {
     const { userId } = req.auth;
-    console.log(userId);
 
     const query = `
         SELECT 

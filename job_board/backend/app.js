@@ -1,10 +1,7 @@
 import cors from "cors";
 import express from "express";
 import { checkDbConnection, dbConnection, initializeDbConnection } from "./databaseConnection.js";
-import userJobsRouter from "./routes/jobs/Jobs.js";
-import applicationRouter from "./routes/users/applications.js";
-import userRouter from "./routes/users/getUserData.js";
-import applicationsRouter from "./routes/jobs/applications.js";
+import routes from "./routes/index.js";
 
 const app = express();
 
@@ -29,10 +26,7 @@ app.use("/protected", (req, res) => {
   res.json({ message: "You are authenticated!" });
 });
 
-app.use("/users", cors(corsOptions), userRouter);
-app.use("/jobs", userJobsRouter);
-app.use("/users", applicationRouter);
-app.use("/jobs", applicationsRouter);
+app.use("/", routes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello, world!" });
