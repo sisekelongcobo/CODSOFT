@@ -52,7 +52,7 @@ export const JobListingsPage: React.FC = () => {
 
         <Grid container spacing={4}>
           {currentJobs?.map((job) => (
-            <Grid item xs={12} sm={6} md={4} key={job.id}>
+            <Grid item xs={12} sm={6} md={4} key={job.jobId}>
               <JobCard job={job} />
             </Grid>
           ))}

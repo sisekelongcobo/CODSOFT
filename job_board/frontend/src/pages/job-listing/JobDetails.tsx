@@ -1,14 +1,22 @@
 import { Box, Button, Card, CardContent, Container, Typography } from "@mui/material";
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Job } from "../../interface";
+import { ErrorNotification } from "../../components/ErrorNotification";
 import TimeAgo from "../../components/TimeAgo";
+import { Job } from "../../interface";
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleOnRetry = () => {
+    window.location.reload();
+  };
+  
+  if (location.state == null) {
+    return <ErrorNotification onRetry={handleOnRetry} errorMessage="Job Not Found" />;
+  }
   const { job } = location.state as { job: Job };
   let jobDetails: Job = job;
 
@@ -31,7 +39,7 @@ export const JobDetailPage: React.FC = () => {
             color="text.secondary"
             sx={{ mb: 2, textAlign: "center" }}
           >
-            Posted: <TimeAgo timestamp={job.createdAt}/> | Type: {jobDetails.jobType} | Work Mode:{" "}
+            Posted: <TimeAgo timestamp={job.createdAt} /> | Type: {jobDetails.jobType} | Work Mode:{" "}
             {jobDetails.workMode}
           </Typography>
 
@@ -86,7 +94,12 @@ export const JobDetailPage: React.FC = () => {
             <Button variant="outlined" onClick={() => navigate(-1)}>
               Back to Previous Page
             </Button>
-            <Button variant="contained" color="primary" sx={{color: 'white'}} onClick={handleApply}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ color: "white" }}
+              onClick={handleApply}
+            >
               Apply Now
             </Button>
           </Box>

@@ -7,10 +7,12 @@ router.use(ClerkExpressRequireAuth());
 router.get("/user-data", async (req, res, next) => {
   try {
     const { userId } = req.auth;
-
+    console.log(userId);
+    
     const user = await clerkClient.users.getUser(userId);
     const fullName = user.fullName || user.firstName || "Unknown";
     const imageUrl = user.imageUrl;
+    const emailAddress = user.emailAddresses[0].emailAddress;
 
     req.db.query("SELECT * FROM users WHERE userId = ?", [userId], (err, result) => {
       if (err) return next(err);
@@ -20,10 +22,10 @@ router.get("/user-data", async (req, res, next) => {
 
         req.db.query(
           "INSERT INTO users SET ?",
-          { userId, role, fullName, imageUrl },
+          { userId, role, fullName, imageUrl, emailAddress },
           (err, insertResult) => {
             if (err) return next(err);
-            res.json({ id: userId, role, fullName, imageUrl });
+            res.json({ id: userId, role, fullName, imageUrl, emailAddress });
           },
         );
       } else {
@@ -34,6 +36,7 @@ router.get("/user-data", async (req, res, next) => {
           role: existingUser.role,
           fullName: existingUser.fullName,
           imageUrl: existingUser.imageUrl,
+          emailAddress: existingUser.emailAddress,
         });
       }
     });

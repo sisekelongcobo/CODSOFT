@@ -1,14 +1,16 @@
 import cors from "cors";
 import express from "express";
-import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
-import userRouter from "./routes/users/getUserData.js";
 import { checkDbConnection, dbConnection, initializeDbConnection } from "./databaseConnection.js";
 import userJobsRouter from "./routes/jobs/Jobs.js";
+import applicationRouter from "./routes/users/applications.js";
+import userRouter from "./routes/users/getUserData.js";
+import applicationsRouter from "./routes/jobs/applications.js";
+
 const app = express();
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, 
-  credentials: true, 
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -29,6 +31,8 @@ app.use("/protected", (req, res) => {
 
 app.use("/users", cors(corsOptions), userRouter);
 app.use("/jobs", userJobsRouter);
+app.use("/users", applicationRouter);
+app.use("/jobs", applicationsRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello, world!" });
@@ -49,7 +53,7 @@ app.use((err, req, res, next) => {
   } else if (err.message === "Missing required parameters") {
     res.status(400).json({ error: "Missing required parameters" });
   } else {
-    console.error("Error:", err); 
+    console.error("Error:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

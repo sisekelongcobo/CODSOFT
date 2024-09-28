@@ -23,6 +23,9 @@ importers:
       mysql2:
         specifier: ^3.11.0
         version: 3.11.3
+      nodemailer:
+        specifier: ^6.9.15
+        version: 6.9.15
     devDependencies:
       nodemon:
         specifier: ^3.1.4
@@ -426,6 +429,10 @@ packages:
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
+
+  nodemailer@6.9.15:
+    resolution: {integrity: sha512-AHf04ySLC6CIfuRtRiEYtGEXgRfa6INgWGluDhnxTZhHSKvrBu7lc1VVchQ0d8nPc4cFaZoPq8vkyNoZr0TpGQ==}
+    engines: {node: '>=6.0.0'}
 
   nodemon@3.1.7:
     resolution: {integrity: sha512-hLj7fuMow6f0lbB0cD14Lz2xNjwsyruH251Pk4t/yIitCFJbmY1myuLlHm/q06aST4jg6EgAh74PIBBrRqpVAQ==}
@@ -1017,6 +1024,8 @@ snapshots:
     dependencies:
       lower-case: 2.0.2
       tslib: 2.4.1
+
+  nodemailer@6.9.15: {}
 
   nodemon@3.1.7:
     dependencies:

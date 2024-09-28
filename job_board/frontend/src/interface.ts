@@ -1,17 +1,21 @@
 export interface Job {
-  id: number;
+  jobId: number;
+  userId: string;
   title: string;
   company: string;
   location: string;
-  postedDate: string;
-  jobType: string; // e.g., Full-time, Contract
-  workMode: string; // e.g., Onsite, Remote, Hybrid
+  jobType: string; 
+  workMode: string;
   companyDescription: string;
   roleDescription: string;
   jobDescription: string;
   responsibilities: string[];
   requirements: string[];
   createdAt: string;
+
+
+  status?: string;
+  appliedDate?: string;
 }
 
 export interface JobCardProps {

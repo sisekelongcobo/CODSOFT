@@ -1,27 +1,18 @@
-import { TextField, Grid } from '@mui/material';
+import { Grid, TextField } from "@mui/material";
 
 export const JobPreferences: React.FC = () => (
   <Grid container spacing={3}>
-
-    {/* Desired Job Titles */}
     <Grid item xs={12} sm={6}>
-      <TextField fullWidth label="Desired Job Titles" variant="outlined" />
+      <TextField fullWidth label="Desired Job Title" variant="outlined" />
     </Grid>
-
-    {/* Preferred Locations */}
     <Grid item xs={12} sm={6}>
-      <TextField fullWidth label="Preferred Locations" variant="outlined" />
+      <TextField fullWidth label="Preferred Location" variant="outlined" />
     </Grid>
-
-    {/* Salary Expectations */}
     <Grid item xs={12} sm={6}>
-      <TextField fullWidth label="Salary Expectations" variant="outlined" />
+      <TextField fullWidth label="Salary Expectation" variant="outlined" />
     </Grid>
-
-    {/* Availability */}
     <Grid item xs={12} sm={6}>
       <TextField fullWidth label="Availability" variant="outlined" />
     </Grid>
-
   </Grid>
 );

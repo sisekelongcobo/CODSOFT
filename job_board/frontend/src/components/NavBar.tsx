@@ -36,14 +36,14 @@ export const NavBar: React.FC = () => {
       .then((data) => {
         setUser(data);
       })
-      .catch((error) => console.error("Error fetching user data:", error)); // Handle errors
+      .catch((error) => console.error("Error fetching user data:", error)); 
   };
 
   useEffect(() => {
     if (isSignedIn) {
-      fetchUser(); // Fetch user data if signed in
+      fetchUser(); 
     }
-  }, [isSignedIn]); // Run effect when isSignedIn changes
+  }, [isSignedIn]); 
 
   const handleLoginClick = () => {
     navigate("/sign-in");

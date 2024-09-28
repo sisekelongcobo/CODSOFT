@@ -48,7 +48,7 @@ export const NewJobs: React.FC = () => {
     <>
       <Grid container spacing={4}>
         {currentJobs.map((job) => (
-          <Grid item xs={12} md={4} key={job.id}>
+          <Grid item xs={12} md={4} key={job.jobId}>
             <Card
               sx={{
                 boxShadow: 3,

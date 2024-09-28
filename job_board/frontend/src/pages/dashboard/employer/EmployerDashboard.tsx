@@ -1,71 +1,73 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Typography,
-  Grid,
+  Button,
   Card,
   CardContent,
-  Button,
-  Paper,
-  Tabs,
-  Tab,
+  Dialog,
+  Grid,
   Pagination,
+  Paper,
+  Tab,
+  Tabs,
+  Typography,
 } from '@mui/material';
+import { NewJobForm } from './NewJobForm'; // Import the form
 import { PendingApplications } from './PendingApplications';
 
 const mockJobs = [
   {
     id: 1,
-    title: 'Software Engineer',
-    description: 'Looking for a skilled software engineer.',
+    title: "Software Engineer",
+    description: "Looking for a skilled software engineer.",
     applications: 5,
   },
   {
     id: 2,
-    title: 'Product Manager',
-    description: 'Seeking a product manager to lead our team.',
+    title: "Product Manager",
+    description: "Seeking a product manager to lead our team.",
     applications: 3,
   },
   {
     id: 3,
-    title: 'UI/UX Designer',
-    description: 'Hiring a UI/UX designer for our new project.',
+    title: "UI/UX Designer",
+    description: "Hiring a UI/UX designer for our new project.",
     applications: 8,
   },
   {
     id: 4,
-    title: 'Software Engineer',
-    description: 'Looking for a skilled software engineer.',
+    title: "Software Engineer",
+    description: "Looking for a skilled software engineer.",
     applications: 5,
   },
   {
     id: 5,
-    title: 'Product Manager',
-    description: 'Seeking a product manager to lead our team.',
+    title: "Product Manager",
+    description: "Seeking a product manager to lead our team.",
     applications: 3,
   },
   {
     id: 6,
-    title: 'UI/UX Designer',
-    description: 'Hiring a UI/UX designer for our new project.',
+    title: "UI/UX Designer",
+    description: "Hiring a UI/UX designer for our new project.",
     applications: 8,
   },
   {
     id: 7,
-    title: 'Software Engineer',
-    description: 'Looking for a skilled software engineer.',
+    title: "Software Engineer",
+    description: "Looking for a skilled software engineer.",
     applications: 5,
   },
   {
     id: 8,
-    title: 'Product Manager',
-    description: 'Seeking a product manager to lead our team.',
+    title: "Product Manager",
+    description: "Seeking a product manager to lead our team.",
     applications: 3,
   },
   {
     id: 9,
-    title: 'UI/UX Designer',
-    description: 'Hiring a UI/UX designer for our new project.',
+    title: "UI/UX Designer",
+    description: "Hiring a UI/UX designer for our new project.",
     applications: 8,
   },
 ];
@@ -95,6 +97,7 @@ function a11yProps(index: any) {
 export const EmployerDashboard: React.FC = () => {
   const [value, setValue] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [openModal, setOpenModal] = useState(false); // Modal state
   const jobsPerPage = 6;
 
   //@ts-ignore
@@ -111,15 +114,33 @@ export const EmployerDashboard: React.FC = () => {
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = mockJobs.slice(indexOfFirstJob, indexOfLastJob);
 
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h4" gutterBottom>
         Employer Dashboard
       </Typography>
 
-      <Button variant="contained" color="primary" sx={{ marginBottom: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ marginBottom: 2, color: 'white' }}
+        onClick={handleOpenModal}
+      >
         Post a New Job
       </Button>
+
+      <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
+        {/* @ts-ignore */}
+        <NewJobForm handleClose={handleCloseModal} />
+      </Dialog>
 
       <Typography variant="h6" gutterBottom>
         Your Job Postings
