@@ -12,6 +12,9 @@ import { JobListingsPage } from "./pages/job-listing/JobListingsPage";
 import { CandidateProfileUpdate } from "./pages/profileUpdate/CandidateProfileUpdate";
 import { NewJobForm } from "./pages/dashboard/employer/NewJobForm";
 import { EmployerDashboard } from "./pages/dashboard/employer/EmployerDashboard";
+import { EmployerProfile } from "./pages/dashboard/employer/ApplicantDetails";
+import { EditJobDetails } from "./pages/dashboard/employer/EditJobDetails";
+import { UserProfileForm } from "./pages/job-listing/Apply";
 
 function App() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -28,6 +31,9 @@ function App() {
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/new-job" element={<NewJobForm />} />
+          <Route path="/applicant-details" element={<EmployerProfile />} />
+          <Route path="/edit-job/:jobId" element={<EditJobDetails />} />
+          <Route path="/apply" element={<UserProfileForm />} />
 
           {isSignedIn ? (
             <>

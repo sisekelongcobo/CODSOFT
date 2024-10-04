@@ -1,4 +1,5 @@
-import React from 'react';
+import { Typography } from "@mui/material";
+import React from "react";
 
 interface TimeAgoProps {
   timestamp: string;
@@ -27,7 +28,11 @@ const timeAgo = (timestamp: string): string => {
 };
 
 const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
-  return <p style={{ margin: 0 }}>{timeAgo(timestamp)}</p>;
+  return (
+    <Typography variant="body2" color="text.secondary" style={{ margin: 0 }}>
+      {timeAgo(timestamp)}
+    </Typography>
+  );
 };
 
 export default TimeAgo;

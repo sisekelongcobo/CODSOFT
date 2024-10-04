@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
-import { Box, Typography, Card, CardContent, Button, Pagination } from '@mui/material';
-
-const mockApplications = [
-  { id: 1, job: 'Software Engineer', applicant: 'John Doe', status: 'Pending' },
-  { id: 2, job: 'Product Manager', applicant: 'Jane Smith', status: 'Accepted' },
-  { id: 3, job: 'UI/UX Designer', applicant: 'Alice Johnson', status: 'Rejected' },
-  { id: 4, job: 'Software Engineer', applicant: 'John Doe', status: 'Pending' },
-  { id: 5, job: 'Product Manager', applicant: 'Jane Smith', status: 'Accepted' },
-  { id: 6, job: 'UI/UX Designer', applicant: 'Alice Johnson', status: 'Rejected' },
-  { id: 7, job: 'Software Engineer', applicant: 'John Doe', status: 'Pending' },
-  { id: 8, job: 'Product Manager', applicant: 'Jane Smith', status: 'Accepted' },
-  { id: 9, job: 'UI/UX Designer', applicant: 'Alice Johnson', status: 'Rejected' },
-];
+import { Box, Button, Card, CardContent, Pagination, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import TimeAgo from "../../../components/TimeAgo";
+import { Applicant } from "../../../interface";
 
 export const PendingApplications: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
   const rowsPerPage = 5;
+
+  const fetchApplicants = async () => {
+    const url = import.meta.env.VITE_API_URL + "/employer/applicants";
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setApplicants(data);
+      })
+      .catch((error) => console.error("Error fetching applicants:", error));
+  };
+
+  useEffect(() => {
+    fetchApplicants();
+  }, []);
 
   //@ts-ignore
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
@@ -24,26 +36,28 @@ export const PendingApplications: React.FC = () => {
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = mockApplications.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = applicants?.slice(indexOfFirstRow, indexOfLastRow);
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ marginTop: 4 }}>
       {currentRows.map((application) => (
-        <Card key={application.id} sx={{ marginBottom: 2 }}>
-          <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Card key={(application.fullName as string) + application.id} sx={{ marginBottom: 2 }}>
+          <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
               <Typography variant="h6">
-                {application.job} - {application.applicant}
+                {application.jobTitle} - {application.fullName}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Status: {application.status}
               </Typography>
+              <TimeAgo timestamp={application.appliedDate} />
             </Box>
 
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => alert(`Viewing application status for ${application.applicant}`)}
+              onClick={() => navigate(`/applicant-details`)}
             >
               View Application
             </Button>
@@ -52,11 +66,11 @@ export const PendingApplications: React.FC = () => {
       ))}
 
       <Pagination
-        count={Math.ceil(mockApplications.length / rowsPerPage)}
+        count={Math.ceil(applicants?.length / rowsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
         color="primary"
-        sx={{ marginTop: 2, justifyContent: 'center', display: 'flex' }}
+        sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}
       />
     </Box>
   );

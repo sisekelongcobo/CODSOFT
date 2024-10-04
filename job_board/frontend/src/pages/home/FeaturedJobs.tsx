@@ -32,7 +32,7 @@ export const FeaturedJobs: React.FC = () => {
       .then((data) => {
         setPostedJobs(data);
       })
-      .catch((error) => console.error("Error fetching user data:", error)); // Handle errors
+      .catch((error) => console.error("Error fetching user data:", error));
   };
 
   useEffect(() => {

@@ -1,15 +1,27 @@
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Dialog, Grid, Paper, Typography, useMediaQuery } from "@mui/material";
 import React, { useRef } from "react";
 import { FeaturedJobs } from "./FeaturedJobs";
 import { NewJobs } from "./NewJobs";
+import { NewJobForm } from "../dashboard/employer/NewJobForm";
+import theme from "../../theme";
 
 export const HomePage: React.FC = () => {
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
+  const [openModal, setOpenModal] = React.useState(false);
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleExploreClick = () => {
     if (featuredJobsRef.current) {
       featuredJobsRef.current.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -91,7 +103,7 @@ export const HomePage: React.FC = () => {
             <Grid item xs={12} md={4} key={index}>
               <Paper
                 elevation={3}
-                sx={{ p: 4, textAlign: "center", backgroundColor: "#fafafa", height: "10rem" }}
+                sx={{height: isMediumScreen ? "10rem" : "12rem" ,p: 4, textAlign: "center", backgroundColor: "#fafafa" }}
               >
                 <Typography variant="h6" sx={{ mb: 2 }}>
                   {benefit}
@@ -121,9 +133,14 @@ export const HomePage: React.FC = () => {
           color="primary"
           size="large"
           sx={{ mt: 3, color: "white" }}
+          onClick={handleOpenModal}
         >
           Post a Job Now
         </Button>
+        <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
+        {/* @ts-ignore */}
+        <NewJobForm handleClose={handleCloseModal} />
+      </Dialog>
       </Box>
     </>
   );

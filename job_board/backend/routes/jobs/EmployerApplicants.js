@@ -1,10 +1,12 @@
+import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 
 const router = express.Router();
 
-router.get("/applications", async (req, res, next) => {
+router.get("/applicants", ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
     const { userId } = req.auth;
+    console.log(req.body);
 
     const query = `
         SELECT 
@@ -16,17 +18,17 @@ router.get("/applications", async (req, res, next) => {
             jp.desiredJobTitle, jp.preferredLocation, jp.salaryExpectations, jp.availability,
             sk.skills
         FROM 
-            userapplications ua
+            user_applications ua
         LEFT JOIN 
-            personalInformation pi ON ua.userId = pi.userId
+            personal_information pi ON ua.userId = pi.userId
         LEFT JOIN 
-            workExperience we ON ua.userId = we.userId
+            work_experience we ON ua.userId = we.userId
         LEFT JOIN 
             education ed ON ua.userId = ed.userId
         LEFT JOIN 
             portfolio pf ON ua.userId = pf.userId
         LEFT JOIN 
-            jobPreferences jp ON ua.userId = jp.userId
+            job_preferences jp ON ua.userId = jp.userId
         LEFT JOIN 
             skills sk ON ua.userId = sk.userId
         WHERE 

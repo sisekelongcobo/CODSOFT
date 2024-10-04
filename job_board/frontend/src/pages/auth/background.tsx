@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-export const Background: React.FC<{children: React.ReactNode}> = ({ children }) => {
+export const Background: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Box style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
       <video

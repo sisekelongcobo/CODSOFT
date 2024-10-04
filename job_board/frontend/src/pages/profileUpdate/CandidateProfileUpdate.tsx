@@ -1,6 +1,6 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
-import AccordionSection from "./AccordionSection";
+import {AccordionSection} from "./AccordionSection";
 import { Education } from "./Education";
 import { JobPreferences } from "./JobPreferences";
 import { Languages } from "./Languages";

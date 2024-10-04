@@ -21,7 +21,7 @@ export const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
   const [user, setUser] = useState<any>();
-  const [drawerOpen, setDrawerOpen] = useState(false); 
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const fetchUser = () => {
     const url = import.meta.env.VITE_API_URL + "/users/user-data";
@@ -36,14 +36,14 @@ export const NavBar: React.FC = () => {
       .then((data) => {
         setUser(data);
       })
-      .catch((error) => console.error("Error fetching user data:", error)); 
+      .catch((error) => console.error("Error fetching user data:", error));
   };
 
   useEffect(() => {
     if (isSignedIn) {
-      fetchUser(); 
+      fetchUser();
     }
-  }, [isSignedIn]); 
+  }, [isSignedIn]);
 
   const handleLoginClick = () => {
     navigate("/sign-in");
@@ -76,14 +76,14 @@ export const NavBar: React.FC = () => {
                 {menu}
               </Button>
             ))}
-            {isSignedIn && user && <Avatar src={user.imageUrl} alt={user.fullName} />} {/* Display user avatar */}
+            {isSignedIn && user && <Avatar src={user.imageUrl} alt={user.fullName} />}{" "}
           </Box>
           <IconButton
             edge="end"
             color="inherit"
             aria-label="menu"
             onClick={handleDrawerToggle}
-            sx={{ display: { xs: "block", md: "none" } }} 
+            sx={{ display: { xs: "block", md: "none" } }}
           >
             <MenuIcon />
           </IconButton>

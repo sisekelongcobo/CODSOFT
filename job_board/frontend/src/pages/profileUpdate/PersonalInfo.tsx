@@ -1,4 +1,4 @@
-import { TextField, Grid } from '@mui/material';
+import { Grid, TextField } from "@mui/material";
 
 export const PersonalInfo: React.FC = () => (
   <Grid container spacing={2}>

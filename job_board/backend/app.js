@@ -22,21 +22,10 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.use("/protected", (req, res) => {
-  res.json({ message: "You are authenticated!" });
-});
-
 app.use("/", routes);
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello, world!" });
-});
-
-app.get("/test", (req, res) => {
-  req.db.query("SELECT * FROM products", (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
-    res.json(results);
-  });
+app.use((req, res) => {
+  res.status(404).json({ error: "Not found" });
 });
 
 app.use((err, req, res, next) => {

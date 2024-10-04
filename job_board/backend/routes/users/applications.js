@@ -1,9 +1,9 @@
+import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 
 const router = express.Router();
 
-// Route to get all applications for a user and join with jobs table to get job title and company
-router.get("/applications", async (req, res, next) => {
+router.get("/applications", ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
     const { userId } = req.auth;
 
@@ -13,7 +13,7 @@ router.get("/applications", async (req, res, next) => {
         j.title,
         j.company
       FROM 
-        userApplications ua
+        user_applications ua
       JOIN 
         jobs j
       ON 

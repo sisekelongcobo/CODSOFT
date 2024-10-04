@@ -3,15 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 interface ErrorNotificationProps {
   errorMessage: string;
-  onRetry: () => void; // Function to retry the action
+  onRetry?: () => void;
 }
 
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({ errorMessage, onRetry }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // Navigate to the previous page or home
-    navigate("/");
+    navigate(-1);
   };
 
   return (
@@ -39,42 +38,47 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = ({ errorMessa
           backgroundColor: "#fff",
         }}
       >
-        <Typography variant="h5" gutterBottom fontWeight="bold" color="error">
-          An Error Occurred
-        </Typography>
+        {onRetry ? (
+          <Typography variant="h5" gutterBottom fontWeight="bold" color="error">
+            An Error Occurred
+          </Typography>
+        ) : null}
 
         <Typography variant="body1" gutterBottom color="textSecondary">
           {errorMessage}
         </Typography>
 
-        <Box display="flex" justifyContent="space-between" mt={2}>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={onRetry}
-            sx={{
-              px: 4,
-              py: 1.5,
-              width: {
-                xs: "45%", // Button width adjustment for small screens
-                sm: "auto", // Auto width for larger screens
-              },
-            }}
-          >
-            Retry
-          </Button>
+        <Box display="flex" justifyContent={onRetry ? "space-between" : "center"} mt={2}>
+          {onRetry ? (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={onRetry}
+              sx={{
+                px: 4,
+                py: 1.5,
+                width: {
+                  xs: "45%", // Button width adjustment for small screens
+                  sm: "auto", // Auto width for larger screens
+                },
+              }}
+            >
+              Retry
+            </Button>
+          ) : null}
 
           <Button
-            variant="outlined"
+            variant={onRetry ? "outlined" : "contained"}
             onClick={handleBack}
             sx={{
               px: 4,
               py: 1.5,
-              color: "#1976d2", // Blue color for the outlined button
-              borderColor: "#1976d2",
+              color: onRetry ? "#1976d2" : "#fff", // White text if it's the "Okay" button
+              borderColor: onRetry ? "#1976d2" : "none",
+              backgroundColor: onRetry ? "none" : "#1976d2", // Blue background for "Okay"
               "&:hover": {
-                borderColor: "#115293", // Darker shade for hover
-                backgroundColor: "rgba(25, 118, 210, 0.1)", // Light blue background on hover
+                borderColor: onRetry ? "#115293" : "none", // Adjust border on hover for "Retry"
+                backgroundColor: onRetry ? "rgba(25, 118, 210, 0.1)" : "#115293", // Adjust background for "Okay" on hover
               },
               width: {
                 xs: "45%", // Button width adjustment for small screens
@@ -82,7 +86,7 @@ export const ErrorNotification: React.FC<ErrorNotificationProps> = ({ errorMessa
               },
             }}
           >
-            Go Back
+            {onRetry ? "Go Back" : "Okay"}
           </Button>
         </Box>
       </Paper>

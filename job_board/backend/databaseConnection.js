@@ -1,5 +1,5 @@
-import mysql2 from "mysql2";
 import dotenv from "dotenv";
+import mysql2 from "mysql2";
 
 dotenv.config({ path: ".env.local" });
 

@@ -14,16 +14,16 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ErrorNotification } from "../../../components/ErrorNotification";
-import { Job } from "../../../interface";
 import TimeAgo from "../../../components/TimeAgo";
+import { Job } from "../../../interface";
 
 export const CandidateDashboard: React.FC = () => {
-  const [userData, setUserData] = useState({fullName: '', role: '', imageUrl: '', userId: ''});
+  const [userData, setUserData] = useState({ fullName: "", role: "", imageUrl: "", userId: "" });
   const navigate = useNavigate();
-  
+
   const [appliedJobs, setAppliedJobs] = useState<Job[]>();
 
-  const handleViewJob = (id: number) => {
+  const handleViewJob = (id: any) => {
     navigate(`/job/${id}`);
   };
 
@@ -44,7 +44,7 @@ export const CandidateDashboard: React.FC = () => {
       .then((data) => {
         setUserData(data);
       })
-      .catch((error) => console.error("Error fetching user data:", error)); 
+      .catch((error) => console.error("Error fetching user data:", error));
   };
 
   const fetchAppliedJobs = () => {
@@ -86,7 +86,12 @@ export const CandidateDashboard: React.FC = () => {
       </Typography>
 
       <Box sx={{ mb: 4 }}>
-        <Button variant="contained" color="primary" sx={{color: 'white'}} onClick={handleUpdateProfile}>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ color: "white" }}
+          onClick={handleUpdateProfile}
+        >
           Update Profile
         </Button>
       </Box>
@@ -111,7 +116,7 @@ export const CandidateDashboard: React.FC = () => {
                 <TableCell>{job.title}</TableCell>
                 <TableCell>{job.company}</TableCell>
                 <TableCell>{job.status}</TableCell>
-                <TableCell>{<TimeAgo timestamp={job.appliedDate as string}/>}</TableCell>
+                <TableCell>{<TimeAgo timestamp={job.appliedDate as string} />}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"

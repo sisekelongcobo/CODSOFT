@@ -1,6 +1,6 @@
-import React from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
+import React from "react";
 
 interface SectionProps {
   title: string;
@@ -9,7 +9,7 @@ interface SectionProps {
   children: React.ReactNode;
 }
 
-const AccordionSection: React.FC<SectionProps> = ({ title, expanded, onChange, children }) => (
+export const AccordionSection: React.FC<SectionProps> = ({ title, expanded, onChange, children }) => (
   <Accordion expanded={expanded} onChange={onChange}>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <Typography variant="h6">{title}</Typography>
@@ -18,4 +18,3 @@ const AccordionSection: React.FC<SectionProps> = ({ title, expanded, onChange, c
   </Accordion>
 );
 
-export default AccordionSection;

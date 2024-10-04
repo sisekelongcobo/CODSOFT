@@ -13,7 +13,7 @@ export const JobDetailPage: React.FC = () => {
   const handleOnRetry = () => {
     window.location.reload();
   };
-  
+
   if (location.state == null) {
     return <ErrorNotification onRetry={handleOnRetry} errorMessage="Job Not Found" />;
   }

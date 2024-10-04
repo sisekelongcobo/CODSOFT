@@ -13,7 +13,7 @@ export const LoadingIndicator: React.FC = () => {
     >
       <CircularProgress size={60} thickness={5} />
       <Typography variant="h6" mt={2}>
-        Loading...
+        Loading please wait...
       </Typography>
     </Box>
   );

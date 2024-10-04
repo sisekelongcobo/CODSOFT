@@ -1,5 +1,5 @@
-import { Button, TextField, Grid } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { Button, Grid, TextField } from "@mui/material";
 
 export const Languages: React.FC = () => (
   <Grid container spacing={2}>

@@ -10,8 +10,10 @@ import {
   Select,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
+import theme from "../../../theme";
 
 export const NewJobForm = () => {
   const [workMode, setWorkMode] = useState<string>("");
@@ -29,6 +31,7 @@ export const NewJobForm = () => {
     responsibilities: [""],
     requirements: [""],
   });
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setJobData({
@@ -70,7 +73,7 @@ export const NewJobForm = () => {
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Card sx={{ maxWidth: "70vw", width: "100%", padding: 3 }}>
         <CardContent>
-          <Typography variant="h4" align="center" gutterBottom>
+          <Typography variant={isMobile ? "h6" : "h4"} align="center" gutterBottom>
             Create New Job
           </Typography>
           <Divider sx={{ marginBottom: 3 }} />
@@ -187,7 +190,6 @@ export const NewJobForm = () => {
               />
             </Grid>
 
-            {/* Responsibilities Section */}
             <Grid item xs={12}>
               <Typography variant="h6">Responsibilities</Typography>
             </Grid>
@@ -213,7 +215,6 @@ export const NewJobForm = () => {
               </Button>
             </Grid>
 
-            {/* Requirements Section */}
             <Grid item xs={12}>
               <Typography variant="h6">Requirements</Typography>
             </Grid>

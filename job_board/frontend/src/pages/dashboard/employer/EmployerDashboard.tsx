@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -11,66 +10,13 @@ import {
   Tab,
   Tabs,
   Typography,
-} from '@mui/material';
-import { NewJobForm } from './NewJobForm'; // Import the form
-import { PendingApplications } from './PendingApplications';
-
-const mockJobs = [
-  {
-    id: 1,
-    title: "Software Engineer",
-    description: "Looking for a skilled software engineer.",
-    applications: 5,
-  },
-  {
-    id: 2,
-    title: "Product Manager",
-    description: "Seeking a product manager to lead our team.",
-    applications: 3,
-  },
-  {
-    id: 3,
-    title: "UI/UX Designer",
-    description: "Hiring a UI/UX designer for our new project.",
-    applications: 8,
-  },
-  {
-    id: 4,
-    title: "Software Engineer",
-    description: "Looking for a skilled software engineer.",
-    applications: 5,
-  },
-  {
-    id: 5,
-    title: "Product Manager",
-    description: "Seeking a product manager to lead our team.",
-    applications: 3,
-  },
-  {
-    id: 6,
-    title: "UI/UX Designer",
-    description: "Hiring a UI/UX designer for our new project.",
-    applications: 8,
-  },
-  {
-    id: 7,
-    title: "Software Engineer",
-    description: "Looking for a skilled software engineer.",
-    applications: 5,
-  },
-  {
-    id: 8,
-    title: "Product Manager",
-    description: "Seeking a product manager to lead our team.",
-    applications: 3,
-  },
-  {
-    id: 9,
-    title: "UI/UX Designer",
-    description: "Hiring a UI/UX designer for our new project.",
-    applications: 8,
-  },
-];
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ErrorNotification } from "../../../components/ErrorNotification";
+import { Job } from "../../../interface";
+import { NewJobForm } from "./NewJobForm";
+import { PendingApplications } from "./PendingApplications";
 
 function CustomTabPanel({ children, value, index, ...other }: any) {
   return (
@@ -80,7 +26,7 @@ function CustomTabPanel({ children, value, index, ...other }: any) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-      style={{ paddingTop: '1rem' }}
+      style={{ paddingTop: "1rem" }}
     >
       {value === index && children}
     </section>
@@ -90,15 +36,42 @@ function CustomTabPanel({ children, value, index, ...other }: any) {
 function a11yProps(index: any) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 export const EmployerDashboard: React.FC = () => {
   const [value, setValue] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [openModal, setOpenModal] = useState(false); // Modal state
+  const [openModal, setOpenModal] = useState(false);
+  const [myJobOpenings, setMyJobOpenings] = useState<Job[]>([]);
   const jobsPerPage = 6;
+  const navigate = useNavigate();
+
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = myJobOpenings.slice(indexOfFirstJob, indexOfLastJob);
+  const jobCount = myJobOpenings?.length ?? 0;
+
+  const fetchJobs = async () => {
+    const url = import.meta.env.VITE_API_URL + "/jobs/all-jobs";
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMyJobOpenings(data);
+      })
+      .catch((error) => console.error("Error fetching jobs:", error));
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   //@ts-ignore
   const handleChangeTab = (event: any, newValue: any) => {
@@ -110,16 +83,46 @@ export const EmployerDashboard: React.FC = () => {
     setCurrentPage(page);
   };
 
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = mockJobs.slice(indexOfFirstJob, indexOfLastJob);
-
   const handleOpenModal = () => {
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const truncateDescription = (description: string, maxLength: number) => {
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + "...";
+    }
+    return description;
+  };
+
+  const handleEditJob = (job: Job) => {
+    navigate(`/edit-job/${job.jobId}`, { state: { job } });
+  };
+
+  const handleDeleteJob = (jobId: any) => {
+    const url = import.meta.env.VITE_API_URL + `/jobs/delete-job/${jobId}`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Job deleted successfully") {
+          fetchJobs();
+          showNotification(data.message);
+        } else showNotification(data.message);
+        fetchJobs();
+      })
+      .catch((error) => console.error("Error deleting job:", error));
+  };
+  const showNotification = (message: string) => {
+    return <ErrorNotification errorMessage={message} />;
   };
 
   return (
@@ -131,7 +134,7 @@ export const EmployerDashboard: React.FC = () => {
       <Button
         variant="contained"
         color="primary"
-        sx={{ marginBottom: 2, color: 'white' }}
+        sx={{ marginBottom: 2, color: "white" }}
         onClick={handleOpenModal}
       >
         Post a New Job
@@ -148,46 +151,43 @@ export const EmployerDashboard: React.FC = () => {
 
       <Grid container spacing={3}>
         {currentJobs.map((job) => (
-          <Grid item xs={12} sm={6} md={4} key={job.id}>
-            <Card>
-              <CardContent>
+          <Grid item xs={12} sm={6} md={4} key={job.jobId}>
+            <Card sx={{ height: "12rem", display: "flex", flexDirection: "column" }}>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h5" component="div">
                   {job.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {job.description}
+                  {truncateDescription(job.jobDescription, 100)}
                 </Typography>
-                <Typography variant="body1" sx={{ marginTop: 1 }}>
-                  Applications: {job.applications}
+                <Typography variant="body2" sx={{ marginTop: 1 }}>
+                  {job.location} | {job.jobType}
                 </Typography>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ marginTop: 2 }}
-                  onClick={() => alert(`Editing job: ${job.title}`)}
-                >
+              </CardContent>
+              <Box sx={{ display: "flex", padding: "0 0 10px 15px" }}>
+                <Button variant="outlined" color="primary" onClick={() => handleEditJob(job)}>
                   Edit Job
                 </Button>
                 <Button
                   variant="outlined"
                   color="error"
-                  sx={{ marginTop: 2, marginLeft: 1 }}
-                  onClick={() => alert(`Deleting job: ${job.title}`)}
+                  sx={{ marginLeft: 1 }}
+                  onClick={() => handleDeleteJob(job.jobId)}
                 >
                   Delete Job
                 </Button>
-              </CardContent>
+              </Box>
             </Card>
           </Grid>
         ))}
       </Grid>
 
       <Pagination
-        count={Math.ceil(mockJobs.length / jobsPerPage)}
+        count={Math.ceil(jobCount / jobsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
         color="primary"
-        sx={{ marginTop: 2, justifyContent: 'center', display: 'flex' }}
+        sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}
       />
 
       <Paper sx={{ marginTop: 4, padding: 2 }}>
@@ -197,7 +197,7 @@ export const EmployerDashboard: React.FC = () => {
         <Typography variant="body2">
           View and manage the status of applications for your job postings.
         </Typography>
-        <Grid sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Grid sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
             <Tab label="Pending Applications" {...a11yProps(0)} />
             <Tab label="Approved Applications" {...a11yProps(1)} />

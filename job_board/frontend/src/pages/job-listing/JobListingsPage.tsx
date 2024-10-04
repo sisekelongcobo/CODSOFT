@@ -1,27 +1,27 @@
 import { Box, Container, Grid, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "../../components/SearchBar";
-import { JobCard } from "./JobCard";
 import { Job } from "../../interface";
+import { JobCard } from "./JobCard";
 
 const jobsPerPage = 6;
 
 export const JobListingsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postedJobs, setPostedJobs] = useState<Job[]>();
-  
+
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = postedJobs?.slice(indexOfFirstJob, indexOfLastJob);
   let jobCount = postedJobs?.length ?? 0;
-  
+
   //@ts-ignore
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 
   const fetchJobs = () => {
-    const url = import.meta.env.VITE_API_URL + "/jobs/all-jobs";  
+    const url = import.meta.env.VITE_API_URL + "/jobs/all-jobs";
     fetch(url, {
       method: "GET",
       headers: {
@@ -33,7 +33,7 @@ export const JobListingsPage: React.FC = () => {
       .then((data) => {
         setPostedJobs(data);
       })
-      .catch((error) => console.error("Error fetching user data:", error)); // Handle errors
+      .catch((error) => console.error("Error fetching user data:", error));
   };
 
   useEffect(() => {

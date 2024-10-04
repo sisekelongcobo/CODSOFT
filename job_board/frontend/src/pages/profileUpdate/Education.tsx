@@ -1,7 +1,7 @@
-import React, { useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, Grid, TextField, IconButton, Box, Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
 
 interface EducationEntry {
   degree: string;
@@ -14,26 +14,16 @@ export const Education: React.FC = () => {
     { degree: "", institution: "", completionDate: "" },
   ]);
 
-  // Handle input change for each education entry
-  const handleInputChange = (
-    index: number,
-    field: keyof EducationEntry,
-    value: string
-  ) => {
+  const handleInputChange = (index: number, field: keyof EducationEntry, value: string) => {
     const newEntries = [...educationEntries];
     newEntries[index][field] = value;
     setEducationEntries(newEntries);
   };
 
-  // Add a new education entry
   const handleAddEducation = () => {
-    setEducationEntries([
-      ...educationEntries,
-      { degree: "", institution: "", completionDate: "" },
-    ]);
+    setEducationEntries([...educationEntries, { degree: "", institution: "", completionDate: "" }]);
   };
 
-  // Remove an education entry
   const handleRemoveEducation = (index: number) => {
     const newEntries = educationEntries.filter((_, i) => i !== index);
     setEducationEntries(newEntries);
@@ -41,14 +31,16 @@ export const Education: React.FC = () => {
 
   return (
     <Box sx={{ mt: 4 }}>
-      {/* Add Education Button */}
-      <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-        <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleAddEducation}>
+      <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddCircleOutlineIcon />}
+          onClick={handleAddEducation}
+        >
           Add Education
         </Button>
       </Grid>
 
-      {/* Render each education entry */}
       {educationEntries.map((entry, index) => (
         <Box key={index} sx={{ mb: 3 }}>
           <Typography variant="h6" gutterBottom>
@@ -75,7 +67,6 @@ export const Education: React.FC = () => {
               />
             </Grid>
 
-            {/* Completion Date */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -88,9 +79,8 @@ export const Education: React.FC = () => {
               />
             </Grid>
 
-            {/* Remove Education Button */}
             {educationEntries.length > 1 && (
-              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
                 <IconButton onClick={() => handleRemoveEducation(index)} color="error">
                   <DeleteIcon />
                 </IconButton>
