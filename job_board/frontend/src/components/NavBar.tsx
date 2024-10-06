@@ -1,8 +1,7 @@
-import { SignOutButton, useAuth } from "@clerk/clerk-react";
+import { SignOutButton, useAuth, useClerk } from "@clerk/clerk-react";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Drawer,
@@ -22,6 +21,7 @@ export const NavBar: React.FC = () => {
   const { isSignedIn } = useAuth();
   const [user, setUser] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { signOut } = useClerk();
 
   const fetchUser = () => {
     const url = import.meta.env.VITE_API_URL + "/users/user-data";
@@ -66,17 +66,34 @@ export const NavBar: React.FC = () => {
             JobBoard
           </Typography>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {["Home", "Job Listings", "Employer Dashboard", "Candidate Dashboard"].map((menu) => (
-              <Button
-                key={menu}
-                color="inherit"
-                sx={{ mx: 1, color: "white" }}
-                onClick={() => handleMenuClick(`/${menu.toLowerCase().replace(/\s/g, "-")}`)}
-              >
-                {menu}
+            {isSignedIn ? (
+              <>
+                {["Home", "Job Listings", "Employer Dashboard", "Candidate Dashboard"].map(
+                  (menu) => (
+                    <Button
+                      key={menu}
+                      color="inherit"
+                      sx={{ mx: 1, color: "white" }}
+                      onClick={() => handleMenuClick(`/${menu.toLowerCase().replace(/\s/g, "-")}`)}
+                    >
+                      {menu}
+                    </Button>
+                  ),
+                )}
+                <Button
+                  key={"signout"}
+                  color="inherit"
+                  sx={{ color: "white", mx: 1 }}
+                  onClick={() => signOut({ redirectUrl: "/home" })}
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Button color="inherit" sx={{ color: "white", mx: 1 }} onClick={handleLoginClick}>
+                Login
               </Button>
-            ))}
-            {isSignedIn && user && <Avatar src={user.imageUrl} alt={user.fullName} />}{" "}
+            )}
           </Box>
           <IconButton
             edge="end"

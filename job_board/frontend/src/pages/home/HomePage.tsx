@@ -47,7 +47,19 @@ export const HomePage: React.FC = () => {
           }}
         >
           <source src="/v1.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
+          <img
+            src="/banner.jpg"
+            alt="Fallback background"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              zIndex: -1,
+            }}
+          />
         </video>
         <Box
           sx={{
