@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ErrorNotification } from "../../../components/ErrorNotification";
 import { Job } from "../../../interface";
+import { ApproveApplications } from "./ApproveApplications";
 import { NewJobForm } from "./NewJobForm";
 import { PendingApplications } from "./PendingApplications";
 
@@ -54,7 +55,7 @@ export const EmployerDashboard: React.FC = () => {
   const jobCount = myJobOpenings?.length ?? 0;
 
   const fetchJobs = async () => {
-    const url = import.meta.env.VITE_API_URL + "/jobs/all-jobs";
+    const url = import.meta.env.VITE_API_URL + `/jobs/my-jobs`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -148,39 +149,44 @@ export const EmployerDashboard: React.FC = () => {
       <Typography variant="h6" gutterBottom>
         Your Job Postings
       </Typography>
-
-      <Grid container spacing={3}>
-        {currentJobs.map((job) => (
-          <Grid item xs={12} sm={6} md={4} key={job.jobId}>
-            <Card sx={{ height: "12rem", display: "flex", flexDirection: "column" }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h5" component="div">
-                  {job.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {truncateDescription(job.jobDescription, 100)}
-                </Typography>
-                <Typography variant="body2" sx={{ marginTop: 1 }}>
-                  {job.location} | {job.jobType}
-                </Typography>
-              </CardContent>
-              <Box sx={{ display: "flex", padding: "0 0 10px 15px" }}>
-                <Button variant="outlined" color="primary" onClick={() => handleEditJob(job)}>
-                  Edit Job
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  sx={{ marginLeft: 1 }}
-                  onClick={() => handleDeleteJob(job.jobId)}
-                >
-                  Delete Job
-                </Button>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      {jobCount === 0 ? (
+        <Typography variant="body2" gutterBottom>
+          You have not posted any jobs yet.
+        </Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {currentJobs.map((job) => (
+            <Grid item xs={12} sm={6} md={4} key={job.jobId}>
+              <Card sx={{ height: "12rem", display: "flex", flexDirection: "column" }}>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h5" component="div">
+                    {job.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {truncateDescription(job.jobDescription, 100)}
+                  </Typography>
+                  <Typography variant="body2" sx={{ marginTop: 1 }}>
+                    {job.location} | {job.jobType}
+                  </Typography>
+                </CardContent>
+                <Box sx={{ display: "flex", padding: "0 0 10px 15px" }}>
+                  <Button variant="outlined" color="primary" onClick={() => handleEditJob(job)}>
+                    Edit Job
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    sx={{ marginLeft: 1 }}
+                    onClick={() => handleDeleteJob(job.jobId)}
+                  >
+                    Delete Job
+                  </Button>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       <Pagination
         count={Math.ceil(jobCount / jobsPerPage)}
@@ -207,7 +213,7 @@ export const EmployerDashboard: React.FC = () => {
           <PendingApplications />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          Approved Applications
+          <ApproveApplications />
         </CustomTabPanel>
       </Paper>
     </Box>

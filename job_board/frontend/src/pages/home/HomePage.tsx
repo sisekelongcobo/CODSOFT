@@ -1,14 +1,15 @@
-import { Box, Button, Container, Dialog, Grid, Paper, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Container, Grid, Paper, Typography, useMediaQuery } from "@mui/material";
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import theme from "../../theme";
 import { FeaturedJobs } from "./FeaturedJobs";
 import { NewJobs } from "./NewJobs";
-import { NewJobForm } from "../dashboard/employer/NewJobForm";
-import theme from "../../theme";
 
 export const HomePage: React.FC = () => {
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
   const [openModal, setOpenModal] = React.useState(false);
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
 
   const handleExploreClick = () => {
     if (featuredJobsRef.current) {
@@ -83,7 +84,6 @@ export const HomePage: React.FC = () => {
           </Button>
         </Box>
       </Box>
-
       <Container ref={featuredJobsRef} sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
           Featured Jobs
@@ -103,7 +103,12 @@ export const HomePage: React.FC = () => {
             <Grid item xs={12} md={4} key={index}>
               <Paper
                 elevation={3}
-                sx={{height: isMediumScreen ? "10rem" : "12rem" ,p: 4, textAlign: "center", backgroundColor: "#fafafa" }}
+                sx={{
+                  height: isMediumScreen ? "10rem" : "12rem",
+                  p: 4,
+                  textAlign: "center",
+                  backgroundColor: "#fafafa",
+                }}
               >
                 <Typography variant="h6" sx={{ mb: 2 }}>
                   {benefit}
@@ -133,14 +138,14 @@ export const HomePage: React.FC = () => {
           color="primary"
           size="large"
           sx={{ mt: 3, color: "white" }}
-          onClick={handleOpenModal}
+          onClick={() => navigate("/employer-dashboard")}
         >
           Post a Job Now
         </Button>
-        <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
-        {/* @ts-ignore */}
-        <NewJobForm handleClose={handleCloseModal} />
-      </Dialog>
+        {/* <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
+          @ts-ignore
+          <NewJobForm handleClose={handleCloseModal} />
+        </Dialog> */}
       </Box>
     </>
   );

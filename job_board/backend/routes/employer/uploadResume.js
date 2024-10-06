@@ -20,7 +20,6 @@ router.post("/upload", upload.single("file"), async (req, res, next) => {
       access: "public",
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
-    console.log("Uploaded file:", blob);
 
     res.json({ url: blob.url });
     // res.json({ blob: blob, });

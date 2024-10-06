@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, Grid, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TimeAgo from "../../components/TimeAgo";
+import { TimeAgo } from "../../components/TimeAgo";
 import { Job } from "../../interface";
 
 const jobsPerPage = 3;

@@ -19,7 +19,6 @@ export const NewJobForm = () => {
   const [workMode, setWorkMode] = useState<string>("");
   const [jobType, setJobType] = useState<string>("");
   const [jobData, setJobData] = useState({
-    userId: "",
     title: "",
     company: "",
     location: "",
@@ -42,10 +41,12 @@ export const NewJobForm = () => {
 
   const handleWorkModeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWorkMode(e.target.value as string);
+    setJobData({ ...jobData, workMode: e.target.value });
   };
 
   const handleJobTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setJobType(e.target.value as string);
+    setJobData({ ...jobData, jobType: e.target.value });
   };
 
   const handleArrayChange = (
@@ -67,6 +68,22 @@ export const NewJobForm = () => {
 
   const handleSubmit = () => {
     console.log(jobData);
+    try {
+      const url = import.meta.env.VITE_API_URL + "/jobs/create-job";
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(jobData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => console.error("Error creating job:", error));
+    } catch (error) {}
   };
 
   return (
@@ -237,7 +254,13 @@ export const NewJobForm = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ color: "white" }}
+                fullWidth
+                onClick={handleSubmit}
+              >
                 Submit
               </Button>
             </Grid>

@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import TimeAgo from "../../components/TimeAgo";
+import { TimeAgo } from "../../components/TimeAgo";
 import { JobCardProps } from "../../interface";
 
 export const JobCard: React.FC<JobCardProps> = ({ job }) => {

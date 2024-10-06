@@ -112,8 +112,6 @@ router.get("/applicant-information/:userId", async (req, res, next) => {
       }
     });
 
-    console.log("response:", response);
-
     res.json(response);
   } catch (err) {
     next(err);
@@ -122,7 +120,6 @@ router.get("/applicant-information/:userId", async (req, res, next) => {
 
 router.put("/applicant-information/:userId", async (req, res, next) => {
   const userId = req.params.userId;
-  console.log(req.body);
 
   const {
     fullName,

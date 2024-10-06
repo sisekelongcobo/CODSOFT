@@ -1,4 +1,5 @@
 import { useAuth } from "@clerk/clerk-react";
+import { NavigateBeforeRounded } from "@mui/icons-material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -11,15 +12,16 @@ import {
   IconButton,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { ErrorNotification } from "../../components/ErrorNotification";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
 import { Notification } from "../../components/Notification";
 import { Project, UserProfile } from "../../interface";
+import theme from "../../theme";
 
-export const UserProfileForm: React.FC = () => {
+export const CandidateProfileUpdate: React.FC = () => {
   const [updatedData, setUpdatedData] = useState<UserProfile>({
     fullName: "",
     phoneNumber: "",
@@ -40,9 +42,7 @@ export const UserProfileForm: React.FC = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
   const user = useAuth();
-  const { jobId } = useParams();
   const [error, setError] = useState<{
     fullName?: string;
     city?: string;
@@ -53,7 +53,6 @@ export const UserProfileForm: React.FC = () => {
     resume?: string;
     skills?: string;
     education?: string;
-    projects?: string;
     experience?: string;
   }>({});
 
@@ -172,7 +171,7 @@ export const UserProfileForm: React.FC = () => {
     }
   };
 
-  const handleApply = async () => {
+  const handleSave = async () => {
     const validationErrors: {
       fullName?: string;
       city?: string;
@@ -183,27 +182,38 @@ export const UserProfileForm: React.FC = () => {
       resume?: string;
       skills?: string;
       education?: string;
-      projects?: string;
       experience?: string;
     } = {};
 
-    if (!updatedData.fullName.trim()) {
+    if (
+      !updatedData.fullName ||
+      updatedData.fullName === "" ||
+      updatedData.fullName === "fullName"
+    ) {
       validationErrors.fullName = "Full name is required";
     }
 
-    if (!updatedData.city.trim()) {
+    if (!updatedData.city || updatedData.city === "" || updatedData.city === "City") {
       validationErrors.city = "City is required";
     }
 
-    if (!updatedData.phoneNumber.trim()) {
+    if (
+      !updatedData.phoneNumber ||
+      updatedData.phoneNumber === "" ||
+      updatedData.phoneNumber === "1234567890"
+    ) {
       validationErrors.phoneNumber = "Phone number is required";
     }
 
-    if (!updatedData.emailAddress.trim()) {
+    if (
+      !updatedData.emailAddress ||
+      updatedData.emailAddress === "" ||
+      updatedData.emailAddress === "emailAddress"
+    ) {
       validationErrors.emailAddress = "Email address is required";
     }
 
-    if (!updatedData.resume.trim()) {
+    if (!updatedData.resume) {
       validationErrors.resume = "Resume is required";
     }
 
@@ -213,10 +223,6 @@ export const UserProfileForm: React.FC = () => {
 
     if (updatedData.education.length === 0) {
       validationErrors.education = "All Education fields are required";
-    }
-
-    if (updatedData.projects.length === 0) {
-      validationErrors.projects = "All Project fields are required";
     }
 
     if (updatedData.experience.length === 0) {
@@ -229,7 +235,6 @@ export const UserProfileForm: React.FC = () => {
     }
 
     updateUserData();
-    applyForJob();
   };
 
   const updateUserData = async () => {
@@ -252,30 +257,6 @@ export const UserProfileForm: React.FC = () => {
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
-    }
-  };
-
-  const applyForJob = async () => {
-    try {
-      const url = import.meta.env.VITE_API_URL + `/employer/applicants/${userId}/${jobId}`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        // const data = await response.json();
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message); // Store the error message
-        setShowErrorNotification(true); // Trigger the fullscreen error notification
-      }
-    } catch (error) {
-      console.error("Error updating user profile:", error);
-      setErrorMessage("An unexpected error occurred. Please try again later.");
-      setShowErrorNotification(true); // Show the error notification for network errors
     }
   };
 
@@ -316,12 +297,25 @@ export const UserProfileForm: React.FC = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", mt: 4, mb: 4 }}>
+    <Box sx={{ maxWidth: 900, mx: "auto", mt: 2, mb: 2 }}>
       {showErrorNotification ? (
         <ErrorNotification errorMessage={errorMessage} />
       ) : (
         <Box>
-          <Card>
+          
+          <Card>{useMediaQuery(theme.breakpoints.down("md")) && (
+            <Button
+              sx={{
+                width: ["-webkit-fill-available", "-moz-available", "100%"],
+                height: "0rem",
+              }}
+              onClick={() => window.history.back()}
+              variant="text"
+              disableElevation
+            >
+              <NavigateBeforeRounded /> Return
+            </Button>
+          )}
             <CardContent>
               <TextField
                 label="Full Name"
@@ -689,8 +683,6 @@ export const UserProfileForm: React.FC = () => {
                     fullWidth
                     label="Project Title"
                     value={project.title || " "}
-                    error={!!error.projects}
-                    helperText={error.projects}
                     onChange={(e) => {
                       const updatedProjects = [...projects];
                       updatedProjects[index].title = e.target.value;
@@ -706,8 +698,6 @@ export const UserProfileForm: React.FC = () => {
                     fullWidth
                     label="Project Link"
                     value={project.link || " "}
-                    error={!!error.projects}
-                    helperText={error.projects}
                     onChange={(e) => {
                       const updatedProjects = [...projects];
                       updatedProjects[index].link = e.target.value;
@@ -723,8 +713,6 @@ export const UserProfileForm: React.FC = () => {
                     fullWidth
                     label="Description"
                     value={project.description || " "}
-                    error={!!error.projects}
-                    helperText={error.projects}
                     multiline
                     rows={4}
                     onChange={(e) => {
@@ -751,14 +739,11 @@ export const UserProfileForm: React.FC = () => {
               ))}
             </CardContent>
           </Card>
-          <Grid sx={{ mt: 3, display: "flex", justifyContent: "space-between" }}>
-            <Button variant="outlined" onClick={() => navigate(-1)}>
-              Cancel
+          <Box sx={{ m: 2 }}>
+            <Button fullWidth variant="contained" sx={{ color: "white" }} onClick={handleSave}>
+              Save
             </Button>
-            <Button variant="contained" sx={{ color: "white" }} onClick={handleApply}>
-              Apply
-            </Button>
-          </Grid>
+          </Box>
         </Box>
       )}
     </Box>

@@ -9,7 +9,7 @@ export const SearchBar: React.FC = () => {
         variant="outlined"
         sx={{ width: "60%", boxShadow: 1 }}
       />
-      <Button variant="contained" color="primary" sx={{ ml: 2, py: 1.5, px: 4 }}>
+      <Button variant="contained" color="primary" sx={{ ml: 2, py: 1.5, px: 4, color: "white" }}>
         Search
       </Button>
     </Box>

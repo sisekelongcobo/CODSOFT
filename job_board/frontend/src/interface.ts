@@ -30,6 +30,20 @@ export interface Applicant {
   appliedDate: string;
 }
 
+export interface Application {
+  applicationId?: number;
+  applicantName: string;
+  status: string;
+  appliedDate: string;
+  applicantId: string;
+  company?: string;
+  jobId: number;
+  jobTitle?: string;
+  jobType?: string;
+  location?: string;
+  workMode?: string;
+}
+
 export interface UserProfile {
   fullName: string;
   phoneNumber: string;

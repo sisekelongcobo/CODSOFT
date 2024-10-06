@@ -1,17 +1,16 @@
 import { Box, Button, Card, CardContent, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { TimeAgo } from "../../../components/TimeAgo";
-import { Application } from "../../../interface";
+import { Applicant } from "../../../interface";
 
-export const PendingApplications: React.FC = () => {
+export const ApproveApplications: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [applicants, setApplicants] = useState<Application[]>([]);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
   const rowsPerPage = 5;
   const applicantCount = applicants?.length ?? 0;
 
   const fetchApplicants = async () => {
-    const url = import.meta.env.VITE_API_URL + "/employer/pending-applicants";
+    const url = import.meta.env.VITE_API_URL + "/employer/approved-applicants";
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -55,30 +54,20 @@ export const PendingApplications: React.FC = () => {
     ? applicants.slice(indexOfFirstRow, indexOfLastRow)
     : [];
 
-  const navigate = useNavigate();
-  console.log(applicants);
-
-  const handleViewApplication = (applicantId: string, jobId: number) => {
-    navigate(`/applicant-details`, { state: { applicantId: applicantId, jobId: jobId } });
-  };
-
   return (
     <>
       {applicantCount === 0 ? (
         <Typography variant="h5" sx={{ marginTop: 4 }}>
-          You have no pending applications.
+          You have no approved applications.
         </Typography>
       ) : (
         <Box sx={{ marginTop: 4 }}>
           {currentRows.map((application) => (
-            <Card
-              key={(application.applicantName as string) + application.applicationId}
-              sx={{ marginBottom: 2 }}
-            >
+            <Card key={(application.fullName as string) + application.id} sx={{ marginBottom: 2 }}>
               <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Box>
                   <Typography variant="h6">
-                    {application.jobTitle} - {application.applicantName}
+                    {application.jobTitle} - {application.fullName}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Status: {application.status}
@@ -86,12 +75,8 @@ export const PendingApplications: React.FC = () => {
                   <TimeAgo timestamp={application.appliedDate} />
                 </Box>
 
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => handleViewApplication(application.applicantId as string, application.jobId as number)}
-                >
-                  View Application
+                <Button variant="outlined" color="primary">
+                  Schedule Interview
                 </Button>
               </CardContent>
             </Card>

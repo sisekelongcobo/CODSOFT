@@ -6,7 +6,6 @@ const router = express.Router();
 router.get("/applicants", ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
     const { userId } = req.auth;
-    console.log(req.body);
 
     const query = `
         SELECT 

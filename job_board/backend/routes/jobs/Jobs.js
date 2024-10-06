@@ -15,6 +15,20 @@ router.get("/all-jobs", async (req, res, next) => {
   }
 });
 
+router.get("/my-jobs/",ClerkExpressRequireAuth(), async (req, res, next) => {
+  try {
+    const user = req.auth;
+    const userId = user?.userId;
+
+    req.db.query("SELECT * FROM jobs WHERE userId = ?", [userId], (err, result) => {
+      if (err) return next(err);
+      res.json(result);
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/new-jobs", async (req, res, next) => {
   try {
     req.db.query(
@@ -30,8 +44,11 @@ router.get("/new-jobs", async (req, res, next) => {
   }
 });
 
-router.post("/add-job", async (req, res, next) => {
+router.post("/create-job",ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
+    const user = req.auth;
+    const userId = user?.userId;
+
     const {
       title,
       company,
@@ -41,12 +58,11 @@ router.post("/add-job", async (req, res, next) => {
       companyDescription,
       roleDescription,
       jobDescription,
-      responsibilities,
-      requirements,
-      userId,
+      responsibilities = [], // Default to empty array if not provided
+      requirements = [], // Default to empty array if not provided
     } = req.body;
 
-    // Ensure all required fields are provided
+    // Validate required fields
     if (
       !title ||
       !company ||
@@ -55,20 +71,19 @@ router.post("/add-job", async (req, res, next) => {
       !workMode ||
       !companyDescription ||
       !roleDescription ||
-      !jobDescription ||
-      !responsibilities ||
-      !requirements ||
-      !userId
+      !jobDescription 
     ) {
       return res.status(400).json({ error: "All required fields must be filled out." });
     }
 
+    // SQL query to insert job data
     const query = `
       INSERT INTO jobs (
         title, company, location, createdAt, jobType, workMode, 
         companyDescription, roleDescription, jobDescription, responsibilities, requirements, userId
-      ) VALUES (?, ?, ?,Now(), ?, ?, ?, ?, ?, ?, ?, ?)`;
+      ) VALUES (?, ?, ?, Now(), ?, ?, ?, ?, ?, ?, ?, ?)`;
 
+    // Prepare the values for the SQL query
     const values = [
       title,
       company,
@@ -78,17 +93,25 @@ router.post("/add-job", async (req, res, next) => {
       companyDescription,
       roleDescription,
       jobDescription,
-      JSON.stringify(responsibilities), // Convert JSON object to string
-      JSON.stringify(requirements), // Convert JSON object to string
+      JSON.stringify(responsibilities), // Convert array/object to string
+      JSON.stringify(requirements), // Convert array/object to string
       userId,
     ];
 
+    // Execute the SQL query
     req.db.query(query, values, (err, result) => {
-      if (err) return next(err);
+      if (err) {
+        // Log error and send response
+        console.error("Error inserting job:", err);
+        return next(err);
+      }
 
+      // Successfully inserted the job, return the job ID
       res.status(201).json({ message: "Job added successfully", jobId: result.insertId });
     });
   } catch (err) {
+    // Handle any unexpected errors
+    console.error("Unexpected error:", err);
     next(err);
   }
 });
@@ -106,6 +129,7 @@ router.delete("/delete-job/:jobId", ClerkExpressRequireAuth(), async (req, res, 
     next(err);
   }
 });
+
 router.put("/update-job/:jobId", async (req, res, next) => {
   try {
     const { jobId } = req.params;

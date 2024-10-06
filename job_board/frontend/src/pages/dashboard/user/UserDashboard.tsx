@@ -14,7 +14,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ErrorNotification } from "../../../components/ErrorNotification";
-import TimeAgo from "../../../components/TimeAgo";
+import { TimeAgo } from "../../../components/TimeAgo";
 import { Job } from "../../../interface";
 
 export const CandidateDashboard: React.FC = () => {
@@ -22,10 +22,6 @@ export const CandidateDashboard: React.FC = () => {
   const navigate = useNavigate();
 
   const [appliedJobs, setAppliedJobs] = useState<Job[]>();
-
-  const handleViewJob = (id: any) => {
-    navigate(`/job/${id}`);
-  };
 
   const handleUpdateProfile = () => {
     navigate("/update-profile");
@@ -107,27 +103,27 @@ export const CandidateDashboard: React.FC = () => {
               <TableCell>Company</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Applied Date</TableCell>
-              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {appliedJobs?.map((job: Job) => (
-              <TableRow key={job.jobId}>
-                <TableCell>{job.title}</TableCell>
-                <TableCell>{job.company}</TableCell>
-                <TableCell>{job.status}</TableCell>
-                <TableCell>{<TimeAgo timestamp={job.appliedDate as string} />}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleViewJob(job.jobId)}
-                    sx={{ mr: 1 }}
-                  >
-                    View
-                  </Button>
+            {appliedJobs?.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4}>
+                  <Typography variant="h6">You have not applied to any jobs yet.</Typography>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              appliedJobs?.map((job) => (
+                <TableRow key={job.jobId}>
+                  <TableCell>{job.title}</TableCell>
+                  <TableCell>{job.company}</TableCell>
+                  <TableCell>{job.status}</TableCell>
+                  <TableCell>
+                    <TimeAgo timestamp={job.appliedDate as string} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

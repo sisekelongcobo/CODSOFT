@@ -27,7 +27,7 @@ const timeAgo = (timestamp: string): string => {
   return `${seconds} second(s) ago`;
 };
 
-const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
+export const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
   return (
     <Typography variant="body2" color="text.secondary" style={{ margin: 0 }}>
       {timeAgo(timestamp)}
@@ -35,4 +35,3 @@ const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
   );
 };
 
-export default TimeAgo;
