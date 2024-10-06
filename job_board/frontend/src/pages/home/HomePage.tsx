@@ -7,7 +7,6 @@ import { NewJobs } from "./NewJobs";
 
 export const HomePage: React.FC = () => {
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
-  const [openModal, setOpenModal] = React.useState(false);
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
@@ -15,14 +14,6 @@ export const HomePage: React.FC = () => {
     if (featuredJobsRef.current) {
       featuredJobsRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  };
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
   };
 
   return (
