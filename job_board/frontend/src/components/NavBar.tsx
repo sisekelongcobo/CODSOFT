@@ -15,12 +15,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme from "../theme";
-import { LoadingIndicator } from "./LoadingIndicator";
 
 export const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
-  const [user, setUser] = useState<any>();
+  const [ setUser] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { signOut } = useClerk();
 
