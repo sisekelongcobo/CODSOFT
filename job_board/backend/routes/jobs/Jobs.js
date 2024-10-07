@@ -194,8 +194,8 @@ router.put("/update-job/:jobId", async (req, res, next) => {
       jobId,
     ];
 
-    // Use promise-based query
-    await req.db.query(query, values);
+    // Add `.promise()` here to use promises with the `mysql2` package
+    await req.db.promise().query(query, values);
 
     res.json({ message: "Job updated successfully" });
   } catch (err) {
@@ -203,4 +203,5 @@ router.put("/update-job/:jobId", async (req, res, next) => {
     next(err);
   }
 });
+
 export default router;

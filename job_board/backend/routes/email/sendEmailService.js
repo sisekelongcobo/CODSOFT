@@ -11,10 +11,12 @@ import {
 const router = express.Router();
 
 router.post("/account-update", async (req, res) => {
-  const { email, fullName } = req.body;
+  const { applicantEmail, applicantName } = req.body;
+
+  console.log(req.body);
 
   try {
-    notifyUserAccountUpdate(email, fullName);
+    notifyUserAccountUpdate(applicantEmail, applicantName);
     res.status(200).send({ message: "Email sent" });
   } catch (err) {
     res.status(500).send({ message: "Error sending email" });
@@ -22,13 +24,14 @@ router.post("/account-update", async (req, res) => {
 });
 
 router.post("/schedule-interview", async (req, res) => {
-  const { userEmail, userFullName, jobTitle, interviewDate, interviewTime, employerName } =
+  const { applicantEmail, applicantName, jobTitle, interviewDate, interviewTime, employerName } =
     req.body;
+  console.log(req.body);
 
   try {
     notifyUserInterviewScheduled(
-      userEmail,
-      userFullName,
+      applicantEmail,
+      applicantName,
       jobTitle,
       interviewDate,
       interviewTime,
@@ -41,14 +44,41 @@ router.post("/schedule-interview", async (req, res) => {
 });
 
 router.post("/new-applicant", async (req, res) => {
-  const { employerEmail, applicantFullName, jobTitle } = req.body;
+  const { applicantFullName, jobId } = req.body;
+  let employerEmail = "";
+  let jobTitle = "";
+  let userId = "";
 
-  try {
-    notifyEmployerNewApplicant(employerEmail, applicantFullName, jobTitle);
-    res.status(200).send({ message: "Email sent" });
-  } catch (err) {
-    res.status(500).send({ message: "Error sending email" });
-  }
+  const getJobTitleQuery = `SELECT title AS jobTitle, userId FROM jobs WHERE jobId = ?`;
+
+  req.db.query(getJobTitleQuery, [jobId], async (err, result) => {
+    if (err) {
+      return res.status(500).send({ message: "Error fetching job title" });
+    }
+
+    jobTitle = result[0].jobTitle;
+    userId = result[0].userId;
+
+    const getEmployerEmailQuery = `SELECT emailAddress AS employerEmail FROM personal_information WHERE userId = ?`;
+
+    req.db.query(getEmployerEmailQuery, [userId], async (err, result) => {
+      if (err) {
+        return res.status(500).send({ message: "Error fetching employer email" });
+      }
+      if(result.length === 0) {
+        return;
+      }
+      employerEmail = result[0].employerEmail;
+      console.log(employerEmail);
+
+      try {
+        notifyEmployerNewApplicant(employerEmail, applicantFullName, jobTitle);
+        res.status(200).send({ message: "Email sent" });
+      } catch (err) {
+        res.status(500).send({ message: "Error sending email" });
+      }
+    });
+  });
 });
 
 router.post("/application-sent", async (req, res) => {
@@ -62,26 +92,56 @@ router.post("/application-sent", async (req, res) => {
   }
 });
 
-router.post("/job-post-updated", async (req, res) => {
-  const { employerEmail, jobTitle } = req.body;
+router.post("/job-post-updated", async (req, res, next) => {
+  const { userId, jobTitle } = req.body;
 
-  try {
-    notifyEmployerJobPostUpdated(employerEmail, jobTitle);
-    res.status(200).send({ message: "Email sent" });
-  } catch (err) {
-    res.status(500).send({ message: "Error sending email" });
-  }
+  let employerEmail = "";
+  let employerName = "";
+  const query = `
+    SELECT emailAddress AS employerEmail, fullName as employerName FROM personal_information WHERE userId = ?`;
+
+  // Execute the query and handle the result
+  req.db.query(query, [userId], async (err, result) => {
+    if (err) {
+      return next(err); // Forward the error to the error-handling middleware
+    }
+
+    if (result.length === 0) {
+      return res.status(400).json({ message: "Employer email not found" });
+    }
+    employerEmail = result[0].employerEmail;
+    employerName = result[0].employerName;
+
+    try {
+      // Send email notification after ensuring the query returned the correct result
+      await notifyEmployerJobPostUpdated(employerEmail, employerName, jobTitle);
+      res.status(200).send({ message: "Email sent" });
+    } catch (err) {
+      res.status(500).send({ message: "Error sending email" });
+    }
+  });
 });
 
 router.post("/application-accepted", async (req, res) => {
-  const { userEmail, userFullName, jobTitle } = req.body;
+  const { userEmail, userFullName, jobId } = req.body;
+  let jobTitle = "";
 
-  try {
-    notifyUserApplicationAccepted(userEmail, userFullName, jobTitle);
-    res.status(200).send({ message: "Email sent" });
-  } catch (err) {
-    res.status(500).send({ message: "Error sending email" });
-  }
+  const getJobTitleQuery = `SELECT title AS jobTitle FROM jobs WHERE jobId = ?`;
+
+  req.db.query(getJobTitleQuery, [jobId], async (err, result) => {
+    if (err) {
+      return res.status(500).send({ message: "Error fetching job title" });
+    }
+
+    jobTitle = result[0].jobTitle;
+
+    try {
+      notifyUserApplicationAccepted(userEmail, userFullName, jobTitle);
+      res.status(200).send({ message: "Email sent" });
+    } catch (err) {
+      res.status(500).send({ message: "Error sending email" });
+    }
+  });
 });
 
 export default router;

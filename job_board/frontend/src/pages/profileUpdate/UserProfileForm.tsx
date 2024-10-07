@@ -15,6 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ErrorNotification } from "../../components/ErrorNotification";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
 import { Notification } from "../../components/Notification";
@@ -35,14 +36,6 @@ export const CandidateProfileUpdate: React.FC = () => {
     education: [],
     projects: [],
   });
-  const [skills, setSkills] = useState<string[]>(updatedData.skills);
-  const [newSkill, setNewSkill] = useState<string>("");
-  const [projects, setProjects] = useState<Project[]>(updatedData.projects);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showNotification, setShowNotification] = useState(false);
-  const [showErrorNotification, setShowErrorNotification] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const user = useAuth();
   const [error, setError] = useState<{
     fullName?: string;
     city?: string;
@@ -55,6 +48,15 @@ export const CandidateProfileUpdate: React.FC = () => {
     education?: string;
     experience?: string;
   }>({});
+  const [skills, setSkills] = useState<string[]>(updatedData.skills);
+  const [newSkill, setNewSkill] = useState<string>("");
+  const [projects, setProjects] = useState<Project[]>(updatedData.projects);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const user = useAuth();
+  const navigate = useNavigate();
 
   if (!user.isLoaded) {
     return <LoadingIndicator />;
@@ -156,6 +158,7 @@ export const CandidateProfileUpdate: React.FC = () => {
           <Notification
             showNotification={showNotification}
             handleCloseNotification={handleCloseNotification}
+            message={data.message}
           />;
         } else {
           console.error("Error uploading file:", data.message);
@@ -163,6 +166,7 @@ export const CandidateProfileUpdate: React.FC = () => {
             showNotification={showNotification}
             handleCloseNotification={handleCloseNotification}
             isRejected={true}
+            message={data.message}
           />;
         }
       } catch (error) {
@@ -235,6 +239,10 @@ export const CandidateProfileUpdate: React.FC = () => {
     }
 
     updateUserData();
+    sendEmailNotification();
+    setTimeout(() => {
+      navigate(-1);
+    }, 2000);
   };
 
   const updateUserData = async () => {
@@ -257,6 +265,34 @@ export const CandidateProfileUpdate: React.FC = () => {
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
+    }
+  };
+
+  const sendEmailNotification = async () => {
+    const url = import.meta.env.VITE_API_URL + "/email/account-update";
+    const userData = {
+      applicantEmail: updatedData.emailAddress,
+      applicantName: updatedData.fullName,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error Updating Profile: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Profile Updated Successfully", data);
+    } catch (error) {
+      console.error("Error Updating Profile", error);
     }
   };
 
@@ -302,20 +338,20 @@ export const CandidateProfileUpdate: React.FC = () => {
         <ErrorNotification errorMessage={errorMessage} />
       ) : (
         <Box>
-          
-          <Card>{useMediaQuery(theme.breakpoints.down("md")) && (
-            <Button
-              sx={{
-                width: ["-webkit-fill-available", "-moz-available", "100%"],
-                height: "0rem",
-              }}
-              onClick={() => window.history.back()}
-              variant="text"
-              disableElevation
-            >
-              <NavigateBeforeRounded /> Return
-            </Button>
-          )}
+          <Card>
+            {useMediaQuery(theme.breakpoints.down("md")) && (
+              <Button
+                sx={{
+                  width: ["-webkit-fill-available", "-moz-available", "100%"],
+                  height: "0rem",
+                }}
+                onClick={() => window.history.back()}
+                variant="text"
+                disableElevation
+              >
+                <NavigateBeforeRounded /> Return
+              </Button>
+            )}
             <CardContent>
               <TextField
                 label="Full Name"

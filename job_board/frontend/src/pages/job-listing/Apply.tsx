@@ -157,6 +157,7 @@ export const UserProfileForm: React.FC = () => {
           <Notification
             showNotification={showNotification}
             handleCloseNotification={handleCloseNotification}
+            message="File uploaded successfully"
           />;
         } else {
           console.error("Error uploading file:", data.message);
@@ -164,6 +165,7 @@ export const UserProfileForm: React.FC = () => {
             showNotification={showNotification}
             handleCloseNotification={handleCloseNotification}
             isRejected={true}
+            message={data.message}
           />;
         }
       } catch (error) {
@@ -267,10 +269,12 @@ export const UserProfileForm: React.FC = () => {
 
       if (response.ok) {
         // const data = await response.json();
+        sendEmailNotificationNewApplicant();
+        sendEmailNotificationApplicationSent();
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message); // Store the error message
-        setShowErrorNotification(true); // Trigger the fullscreen error notification
+        setErrorMessage(errorData.message);
+        setShowErrorNotification(true);
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
@@ -313,6 +317,64 @@ export const UserProfileForm: React.FC = () => {
     if (day.length < 2) day = "0" + day;
 
     return [year, month, day].join("-");
+  };
+
+  const sendEmailNotificationNewApplicant = async () => {
+    const url = import.meta.env.VITE_API_URL + "/email/new-applicant";
+    try {
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          jobId: jobId,
+          applicantFullName: updatedData.fullName,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error sending email notification: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Email notification sent:", data);
+        })
+        .catch((error) => console.error("Error sending email notification:", error));
+    } catch (error) {
+      console.error("Error sending email notification:", error);
+    }
+  };
+
+  const sendEmailNotificationApplicationSent = async () => {
+    const url = import.meta.env.VITE_API_URL + "/email/application-sent";
+    try {
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          userFullName: updatedData.fullName,
+          userEmail: updatedData.emailAddress,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error sending email notification: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Email notification sent:", data);
+        })
+        .catch((error) => console.error("Error sending email notification:", error));
+    } catch (error) {
+      console.error("Error sending email notification:", error);
+    }
   };
 
   return (

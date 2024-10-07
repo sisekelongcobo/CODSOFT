@@ -15,6 +15,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import theme from "../theme";
+import { LoadingIndicator } from "./LoadingIndicator";
 
 export const NavBar: React.FC = () => {
   const navigate = useNavigate();
@@ -44,6 +45,10 @@ export const NavBar: React.FC = () => {
       fetchUser();
     }
   }, [isSignedIn]);
+
+  if (!user) {
+    return <LoadingIndicator />;
+  }
 
   const handleLoginClick = () => {
     navigate("/sign-in");

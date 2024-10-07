@@ -56,7 +56,6 @@ export const PendingApplications: React.FC = () => {
     : [];
 
   const navigate = useNavigate();
-  console.log(applicants);
 
   const handleViewApplication = (applicantId: string, jobId: number) => {
     navigate(`/applicant-details`, { state: { applicantId: applicantId, jobId: jobId } });
@@ -70,9 +69,13 @@ export const PendingApplications: React.FC = () => {
         </Typography>
       ) : (
         <Box sx={{ marginTop: 4 }}>
-          {currentRows.map((application) => (
+          {currentRows.map((application, index) => (
             <Card
-              key={(application.applicantName as string) + application.applicationId}
+              key={
+                application.applicantName.toString() +
+                index.toString() +
+                application.applicationId?.toString()
+              }
               sx={{ marginBottom: 2 }}
             >
               <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -89,7 +92,12 @@ export const PendingApplications: React.FC = () => {
                 <Button
                   variant="outlined"
                   color="primary"
-                  onClick={() => handleViewApplication(application.applicantId as string, application.jobId as number)}
+                  onClick={() =>
+                    handleViewApplication(
+                      application.applicantId as string,
+                      application.jobId as number,
+                    )
+                  }
                 >
                   View Application
                 </Button>

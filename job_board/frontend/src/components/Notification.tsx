@@ -6,12 +6,14 @@ interface NotificationProps {
   showNotification: boolean;
   handleCloseNotification: () => void;
   isRejected?: boolean;
+  message?: string;
 }
 
 export const Notification: React.FC<NotificationProps> = ({
   showNotification,
   handleCloseNotification,
   isRejected,
+  message,
 }) => {
   return (
     <Snackbar
@@ -31,7 +33,7 @@ export const Notification: React.FC<NotificationProps> = ({
           elevation={6}
           variant="filled"
         >
-          Operation Successful
+          {message}
         </MuiAlert>
       )}
     </Snackbar>

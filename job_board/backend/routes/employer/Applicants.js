@@ -37,7 +37,7 @@ router.get("/approved-applicants", ClerkExpressRequireAuth(), async (req, res, n
     // SQL query to fetch pending applications with applicant's full name
     const query = `
       SELECT ua.applicationId, ua.jobId, ua.userId AS applicantId, pi.fullName AS applicantName, 
-             ua.status, ua.appliedDate, j.title AS jobTitle, j.company, j.location, 
+             ua.status, ua.appliedDate, j.title AS jobTitle, j.company, j.location, pi.emailAddress AS applicantEmail,
              j.jobType, j.workMode
       FROM user_applications ua
       JOIN jobs j ON ua.jobId = j.jobId
@@ -93,7 +93,7 @@ router.post("/applicants/:userId/:jobId", async (req, res, next) => {
   }
 });
 
-router.put("/applicants/:userId/:jobId", async (req, res, next) => {
+router.put("/applicants/confirm:userId/:jobId", async (req, res, next) => {
   try {
     const { userId, jobId } = req.params;
 
@@ -101,7 +101,7 @@ router.put("/applicants/:userId/:jobId", async (req, res, next) => {
       UPDATE 
           user_applications
       SET 
-          status = 'accepted'
+          status = 'Accepted'
       WHERE 
           userId = ?
       AND 
@@ -117,13 +117,15 @@ router.put("/applicants/:userId/:jobId", async (req, res, next) => {
   }
 });
 
-router.delete("/applicants/:userId/:jobId", async (req, res, next) => {
+router.put("/applicants/reject/:userId/:jobId", async (req, res, next) => {
   try {
     const { userId, jobId } = req.params;
 
     const query = `
-      DELETE FROM 
+      UPDATE 
           user_applications
+      SET 
+          status = 'Rejected'
       WHERE 
           userId = ?
       AND 

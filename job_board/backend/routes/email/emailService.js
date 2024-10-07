@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 dotenv.config({ path: "../../.env.local" });
 
 // Create a transporter
-export const sendTestEmail = (mailOptions) => {
+export const sendEmail = (mailOptions) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -52,14 +52,14 @@ const createAccountUpdateTemplate = (fullName) => `
 `;
 
 const createApplicationAcceptedTemplate = (fullName, jobTitle) => `
-  Dear ${fullName},
+  <p>Dear ${fullName},</p>
   
-  Congratulations! We are thrilled to inform you that your application for the position of <strong>${jobTitle}</strong> has been accepted by the employer. This is an important step toward starting your new role, and we know it’s a great opportunity for you.</p>
-  The employer will likely contact you soon with further instructions regarding the next steps in the hiring process. In the meantime, we encourage you to log in to your account and review any updates or requests from the employer.</p>
-  If you have any questions or need assistance, don't hesitate to reach out. We wish you the best of luck as you move forward with this exciting opportunity!</p>
-  
+  <p>Congratulations! We are thrilled to inform you that your application for the position of <strong>${jobTitle}</strong> has been accepted by the employer. This is an important step toward starting your new role, and we know it’s a great opportunity for you.</p>
+  <p>The employer will likely contact you soon with further instructions regarding the next steps in the hiring process. In the meantime, we encourage you to log in to your account and review any updates or requests from the employer.</p>
+  <p>If you have any questions or need assistance, don't hesitate to reach out. We wish you the best of luck as you move forward with this exciting opportunity!</p>
+  <br>
   Kind regards,
-  
+  <br>
   Job Board Team
 `;
 
@@ -114,7 +114,7 @@ export const notifyUserAccountUpdate = (userEmail, userFullName) => {
     html: htmlContent,
   };
 
-  sendTestEmail(mailOptions);
+  sendEmail(mailOptions);
 };
 
 export const notifyUserApplicationAccepted = (userEmail, userFullName, jobTitle) => {
@@ -124,16 +124,10 @@ export const notifyUserApplicationAccepted = (userEmail, userFullName, jobTitle)
     from: process.env.MY_EMAIL_ADDRESS,
     to: userEmail,
     subject: subject,
-    text: htmlContent,
+    html: htmlContent,
   };
-  // sendEmail(userEmail, subject, htmlContent);
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("Error: " + error.message);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+
+  sendEmail(mailOptions);
 };
 
 export const notifyEmployerJobPostUpdated = (employerEmail, employerName, jobTitle) => {
@@ -143,16 +137,10 @@ export const notifyEmployerJobPostUpdated = (employerEmail, employerName, jobTit
     from: process.env.MY_EMAIL_ADDRESS,
     to: employerEmail,
     subject: subject,
-    text: htmlContent,
+    html: htmlContent,
   };
-  // sendEmail(employerEmail, subject, htmlContent);
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("Error: " + error.message);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+
+  sendEmail(mailOptions);
 };
 
 export const notifyUserApplicationSent = (userEmail, userFullName) => {
@@ -162,16 +150,10 @@ export const notifyUserApplicationSent = (userEmail, userFullName) => {
     from: process.env.MY_EMAIL_ADDRESS,
     to: userEmail,
     subject: subject,
-    text: htmlContent,
+    html: htmlContent,
   };
-  // sendEmail(userEmail, subject, htmlContent);
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("Error: " + error.message);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+
+  sendEmail(mailOptions);
 };
 
 export const notifyEmployerNewApplicant = (employerEmail, applicantFullName, jobTitle) => {
@@ -181,16 +163,10 @@ export const notifyEmployerNewApplicant = (employerEmail, applicantFullName, job
     from: process.env.MY_EMAIL_ADDRESS,
     to: employerEmail,
     subject: subject,
-    text: htmlContent,
+    html: htmlContent,
   };
   // sendEmail(employerEmail, subject, htmlContent);
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("Error: " + error.message);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+  sendEmail(mailOptions);
 };
 
 export const notifyUserInterviewScheduled = (
@@ -216,7 +192,7 @@ export const notifyUserInterviewScheduled = (
     html: htmlContent,
   };
 
-  sendTestEmail(mailOptions);
+  sendEmail(mailOptions);
 };
 
 export const notifyUserApplicationRejected = (userEmail, userFullName, jobTitle) => {
@@ -229,5 +205,5 @@ export const notifyUserApplicationRejected = (userEmail, userFullName, jobTitle)
     html: htmlContent,
   };
 
-  sendTestEmail(mailOptions);
+  sendEmail(mailOptions);
 };

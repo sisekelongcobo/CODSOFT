@@ -4,7 +4,7 @@ export interface Job {
   title: string;
   company: string;
   location: string;
-  jobType: string; 
+  jobType: string;
   workMode: string;
   companyDescription: string;
   roleDescription: string;
@@ -12,7 +12,6 @@ export interface Job {
   responsibilities: string[];
   requirements: string[];
   createdAt: string;
-
 
   status?: string;
   appliedDate?: string;
@@ -49,7 +48,7 @@ export interface UserProfile {
   phoneNumber: string;
   emailAddress: string;
   city: string;
-  resume: string; 
+  resume: string;
   linkedInProfileLink: string;
   githubProfileLink: string;
 
@@ -57,16 +56,16 @@ export interface UserProfile {
   skills: string[];
 
   education: Education[];
-  
+
   projects: Project[];
 }
 
 export interface Experience {
   jobTitle: string;
   company: string;
-  startDate: string; 
-  endDate: string;   
-  responsibilities: string; 
+  startDate: string;
+  endDate: string;
+  responsibilities: string;
 }
 
 export interface Education {
@@ -77,7 +76,7 @@ export interface Education {
 
 export interface Project {
   title: string;
-  link: string; 
+  link: string;
   description: string;
 }
 
@@ -89,3 +88,12 @@ export interface UploadedFile {
   contentDisposition: string;
 }
 
+export interface InterviewData {
+  applicantId?: string;
+  applicantEmail: string;
+  jobTitle: string;
+  applicantName: string;
+  interviewDate: string;
+  interviewTime: string;
+  employerName: string; //company name
+}

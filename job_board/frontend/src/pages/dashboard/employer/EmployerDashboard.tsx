@@ -166,7 +166,7 @@ export const EmployerDashboard: React.FC = () => {
                     {truncateDescription(job.jobDescription, 100)}
                   </Typography>
                   <Typography variant="body2" sx={{ marginTop: 1 }}>
-                    {job.location} | {job.jobType}
+                    {truncateDescription(job.location, 20)} | {job.jobType}
                   </Typography>
                 </CardContent>
                 <Box sx={{ display: "flex", padding: "0 0 10px 15px" }}>

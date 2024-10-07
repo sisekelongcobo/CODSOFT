@@ -1,9 +1,9 @@
 import { Box, Button, Card, CardContent, Chip, Grid, Link, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { LoadingIndicator } from "../../../components/LoadingIndicator";
 import { Notification } from "../../../components/Notification";
 import { Project, UserProfile } from "../../../interface";
-import { LoadingIndicator } from "../../../components/LoadingIndicator";
 
 export const ApplicantDetails: React.FC = () => {
   const [showNotification, setShowNotification] = useState(false); // State to manage notification visibility
@@ -14,7 +14,7 @@ export const ApplicantDetails: React.FC = () => {
   const navigate = useNavigate();
 
   const handleAccept = async () => {
-    const url = `${import.meta.env.VITE_API_URL}/employer/applicants/${applicantId}/${jobId}`;
+    const url = `${import.meta.env.VITE_API_URL}/employer/applicants/confirm/${applicantId}/${jobId}`;
     try {
       const response = await fetch(url, {
         method: "PUT",
@@ -25,9 +25,18 @@ export const ApplicantDetails: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Error accepting applicant: ${response.statusText}`);
+        // throw new Error(`Error accepting applicant: ${response.statusText}`);
+        return (
+          <Notification
+            showNotification={showNotification}
+            handleCloseNotification={handleCloseNotification}
+            isRejected={isRejected}
+            message={`Error accepting applicant: ${response.statusText}`}
+          />
+        );
       }
 
+      sendNotificationEmailApplicationAccepted();
       setShowNotification(true);
       setIsRejected(false);
       setTimeout(() => {
@@ -39,9 +48,9 @@ export const ApplicantDetails: React.FC = () => {
   };
 
   const handleReject = () => {
-    const url = `${import.meta.env.VITE_API_URL}/employer/applicants/${applicantId}/${jobId}`;
+    const url = `${import.meta.env.VITE_API_URL}/employer/applicants/reject/${applicantId}/${jobId}`;
     fetch(url, {
-      method: "DELETE",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -97,7 +106,7 @@ export const ApplicantDetails: React.FC = () => {
   }, []);
 
   if (!userProfile) {
-    return <LoadingIndicator/>;
+    return <LoadingIndicator />;
   }
 
   const {
@@ -113,6 +122,31 @@ export const ApplicantDetails: React.FC = () => {
     education = [],
     projects = [],
   } = userProfile;
+
+  const sendNotificationEmailApplicationAccepted = async () => {
+    const url = `${import.meta.env.VITE_API_URL}/email/application-accepted`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          jobId: jobId,
+          userFullName: userProfile.fullName,
+          userEmail: userProfile.emailAddress,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error sending email: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", mt: 4, mb: 4 }}>
@@ -248,6 +282,7 @@ export const ApplicantDetails: React.FC = () => {
         showNotification={showNotification}
         handleCloseNotification={handleCloseNotification}
         isRejected={isRejected}
+        message="Applicant has been accepted!"
       />
     </Box>
   );

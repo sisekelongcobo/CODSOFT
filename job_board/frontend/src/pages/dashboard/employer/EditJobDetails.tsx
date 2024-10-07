@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/clerk-react";
 import AddIcon from "@mui/icons-material/Add";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
@@ -13,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Job } from "../../../interface";
 
 export const EditJobDetails: React.FC = () => {
@@ -35,8 +36,12 @@ export const EditJobDetails: React.FC = () => {
   const [newResponsibility, setNewResponsibility] = useState("");
   const [newRequirement, setNewRequirement] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const { job } = location.state as { job: Job };
   const jobId = job.jobId;
+  const jobTitle = job.title;
+  const { user } = useUser();
+  const userId = user?.id;
 
   useEffect(() => {
     if (job) {
@@ -98,6 +103,7 @@ export const EditJobDetails: React.FC = () => {
   };
 
   const handleSave = async () => {
+    sendEmailNotification();
     if (jobDetails.createdAt) {
       const createdAtDate = new Date(jobDetails.createdAt);
       jobDetails.createdAt = createdAtDate.toISOString().slice(0, 19).replace("T", " "); // Formats to "YYYY-MM-DD HH:MM:SS"
@@ -106,11 +112,9 @@ export const EditJobDetails: React.FC = () => {
         createdAt: createdAtDate.toISOString().slice(0, 19).replace("T", " "),
       });
     }
-    console.log("Updated Job Details: ", jobDetails);
 
     try {
       const url = import.meta.env.VITE_API_URL + `/jobs/update-job/${jobId}`;
-      console.log("URL: ", url);
 
       const response = await fetch(url, {
         method: "PUT",
@@ -126,6 +130,42 @@ export const EditJobDetails: React.FC = () => {
       }
     } catch (error) {
       console.error("Failed to update job details: ", error);
+    }
+    setTimeout(() => {
+      navigate(-1);
+    }, 2000);
+  };
+  const data = {
+    jobTitle: jobTitle,
+    userId: userId,
+  };
+
+  const sendEmailNotification = async () => {
+    try {
+      const url = import.meta.env.VITE_API_URL + `/email/job-post-updated`;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to send email notification: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Email notification sent successfully: ", data);
+        })
+        .catch((error) => {
+          console.error("Failed to send email notification: ", error);
+        });
+    } catch (error) {
+      console.error("Failed to send email notification: ", error);
     }
   };
 

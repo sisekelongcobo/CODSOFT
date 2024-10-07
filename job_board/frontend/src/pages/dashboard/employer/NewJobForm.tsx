@@ -67,7 +67,6 @@ export const NewJobForm = () => {
   };
 
   const handleSubmit = () => {
-    console.log(jobData);
     try {
       const url = import.meta.env.VITE_API_URL + "/jobs/create-job";
       fetch(url, {
