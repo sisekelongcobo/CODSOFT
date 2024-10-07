@@ -19,7 +19,6 @@ import theme from "../theme";
 export const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
-  const [ setUser] = useState<any>();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { signOut } = useClerk();
 
@@ -33,9 +32,6 @@ export const NavBar: React.FC = () => {
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((data) => {
-        setUser(data);
-      })
       .catch((error) => console.error("Error fetching user data:", error));
   };
 
