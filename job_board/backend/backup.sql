@@ -16,6 +16,63 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `education`
+--
+
+DROP TABLE IF EXISTS `education`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `education` (
+  `educationId` int NOT NULL AUTO_INCREMENT,
+  `userId` varchar(255) NOT NULL,
+  `degree` varchar(255) DEFAULT NULL,
+  `institution` varchar(255) DEFAULT NULL,
+  `completionDate` date DEFAULT NULL,
+  PRIMARY KEY (`educationId`),
+  KEY `education_ibfk_1` (`userId`),
+  CONSTRAINT `education_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `education`
+--
+
+LOCK TABLES `education` WRITE;
+/*!40000 ALTER TABLE `education` DISABLE KEYS */;
+INSERT INTO `education` VALUES (65,'user_2mzjq8e8KtTUu2Wrm47KcYQuEA0','degree','institution','2021-12-30'),(75,'user_2mct2xF74sfyViuQNRF1xT8u2by','degree','institution','2021-12-27'),(76,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','  New Degree',' New uni','2024-10-15'),(77,'user_2mip1EuHF2lJy2pYPuPto9otSrz','degree','institution','2022-01-01'),(78,'user_2n84dm3v2r0lQV2b70jwT5xWFhU','degree','institution','2022-01-01');
+/*!40000 ALTER TABLE `education` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `job_preferences`
+--
+
+DROP TABLE IF EXISTS `job_preferences`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `job_preferences` (
+  `userId` varchar(255) NOT NULL,
+  `desiredJobTitle` varchar(255) DEFAULT NULL,
+  `preferredLocation` varchar(255) DEFAULT NULL,
+  `salaryExpectations` varchar(50) DEFAULT NULL,
+  `availability` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`userId`),
+  CONSTRAINT `job_preferences_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_preferences`
+--
+
+LOCK TABLES `job_preferences` WRITE;
+/*!40000 ALTER TABLE `job_preferences` DISABLE KEYS */;
+INSERT INTO `job_preferences` VALUES ('user_2llRVybvC2VnvXxm4f1GzTmUdGo','Senior Software Engineer','Johannesburg','R600,000 - R700,000 per annum','Immediate'),('user_2mct2xF74sfyViuQNRF1xT8u2by','Data Scientist','Durban','R500,000 - R600,000 per annum','One Month Notice');
+/*!40000 ALTER TABLE `job_preferences` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `jobs`
 --
 
@@ -23,11 +80,10 @@ DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `jobId` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `company` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
-  `postedDate` varchar(50) NOT NULL,
   `jobType` varchar(50) NOT NULL,
   `workMode` varchar(50) NOT NULL,
   `companyDescription` text,
@@ -36,8 +92,11 @@ CREATE TABLE `jobs` (
   `responsibilities` json DEFAULT NULL,
   `requirements` json DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `userId` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`jobId`),
+  KEY `fk_userId` (`userId`),
+  CONSTRAINT `fk_userId` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,35 +105,124 @@ CREATE TABLE `jobs` (
 
 LOCK TABLES `jobs` WRITE;
 /*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
-INSERT INTO `jobs` VALUES (1,'Software Engineer','Tech Corp','Cape Town, Western Cape','2 days ago','Full-time','Hybrid','Tech Corp is a leading technology company focused on delivering innovative solutions. We value creativity, collaboration, and excellence.','As a Software Engineer, you will design and develop software applications. Collaborating with a dynamic team, you will create high-quality products.','We are looking for a skilled Software Engineer to join our team. The successful candidate will work on developing high-quality applications and collaborate with other developers, designers, and product managers.','[\"Develop and maintain software applications\", \"Collaborate with cross-functional teams\", \"Participate in code reviews and contribute to team knowledge sharing\", \"Troubleshoot and debug applications\"]','[\"Bachelor?s degree in Computer Science or related field\", \"Experience with JavaScript, React, and Node.js\", \"Strong problem-solving skills\", \"Excellent communication skills\"]','2024-09-26 03:53:31'),(2,'Marketing Specialist','Creative Agency','Johannesburg, Gauteng','1 week ago','Contract','Remote','Creative Agency is a top marketing agency known for developing cutting-edge marketing strategies for various clients.','The Marketing Specialist will work on campaigns to drive brand awareness and engagement for our clients. You?ll be involved in content creation and strategy.','We are seeking a creative Marketing Specialist to develop innovative marketing strategies and campaigns for a diverse portfolio of clients.','[\"Develop and execute marketing campaigns\", \"Create compelling content for digital and print media\", \"Collaborate with clients to understand their needs\", \"Analyze campaign performance and optimize strategies\"]','[\"Degree in Marketing, Communications, or a related field\", \"Proficiency in digital marketing tools (e.g., Google Analytics)\", \"Experience in social media management\", \"Strong writing and editing skills\"]','2024-09-26 03:53:31'),(3,'Product Manager','Startup Inc.','Durban, KwaZulu-Natal','3 days ago','Full-time','Onsite','Startup Inc. is a fast-growing company focused on delivering innovative products to solve real-world problems.','The Product Manager will be responsible for guiding the development of new products from concept to launch, working closely with engineering and marketing teams.','We are looking for an experienced Product Manager to oversee product development, ensuring alignment with business goals and market needs.','[\"Define product strategy and roadmap\", \"Work with engineering teams to develop product features\", \"Coordinate with marketing for product launch campaigns\", \"Analyze market trends and customer feedback\"]','[\"Proven experience in product management\", \"Ability to lead cross-functional teams\", \"Strong analytical and problem-solving skills\", \"Excellent communication and presentation skills\"]','2024-09-26 03:53:31'),(4,'Data Scientist','Big Data Analytics','Pretoria, Gauteng','4 days ago','Full-time','Remote','Big Data Analytics is a global leader in data science, offering data-driven solutions to help businesses make informed decisions.','The Data Scientist will apply machine learning techniques to analyze large datasets and generate actionable insights for business improvement.','We are seeking a talented Data Scientist to work with large datasets, applying statistical models and machine learning algorithms to solve complex business problems.','[\"Analyze large datasets to discover trends\", \"Develop machine learning models\", \"Communicate findings to stakeholders\", \"Collaborate with cross-functional teams\"]','[\"Degree in Statistics, Computer Science, or related field\", \"Experience with Python, R, and SQL\", \"Knowledge of machine learning algorithms\", \"Strong communication and problem-solving skills\"]','2024-09-26 03:53:31'),(5,'UI/UX Designer','DesignPro Studio','Sandton, Gauteng','5 days ago','Contract','Hybrid','DesignPro Studio is a design consultancy that specializes in creating user-centered interfaces for mobile and web applications.','The UI/UX Designer will create intuitive and aesthetically pleasing user interfaces while ensuring a seamless user experience.','We are looking for a creative UI/UX Designer to collaborate with developers and clients to design cutting-edge digital experiences.','[\"Design user interfaces for web and mobile apps\", \"Conduct user research and usability testing\", \"Collaborate with developers to implement designs\", \"Stay updated with design trends and best practices\"]','[\"Experience with Figma, Sketch, or Adobe XD\", \"Strong portfolio showcasing UI/UX design work\", \"Knowledge of design systems and responsive design\", \"Excellent communication skills\"]','2024-09-19 10:00:00'),(6,'DevOps Engineer','Cloud Solutions','Bloemfontein, Free State','1 week ago','Full-time','Onsite','Cloud Solutions is a leader in cloud computing services, helping businesses transition to scalable and secure cloud infrastructures.','As a DevOps Engineer, you will manage the cloud infrastructure, automate deployments, and ensure the reliability of production environments.','We are seeking a DevOps Engineer to maintain and optimize our cloud infrastructure, focusing on automation, monitoring, and security.','[\"Manage cloud infrastructure (AWS, Azure, GCP)\", \"Automate software deployments and monitoring\", \"Ensure system security and scalability\", \"Collaborate with developers and IT teams\"]','[\"Experience with cloud platforms (AWS, Azure, GCP)\", \"Strong understanding of CI/CD pipelines\", \"Familiarity with Docker and Kubernetes\", \"Excellent problem-solving and communication skills\"]','2024-09-19 10:00:00'),(7,'Financial Analyst','FinGroup','Port Elizabeth, Eastern Cape','1 day ago','Full-time','Hybrid','FinGroup is a leading financial services company that provides investment advice and risk management solutions.','The Financial Analyst will analyze financial data, prepare reports, and provide recommendations to improve business performance.','We are looking for a Financial Analyst to assess business performance and provide actionable insights to drive financial success.','[\"Analyze financial statements and forecasts\", \"Prepare reports for senior management\", \"Provide insights on financial performance\", \"Work with departments to improve profitability\"]','[\"Degree in Finance or Accounting\", \"Strong analytical and Excel skills\", \"Experience with financial modeling\", \"Excellent communication and reporting skills\"]','2024-09-19 10:00:00'),(8,'Operations Manager','Logistics World','East London, Eastern Cape','2 weeks ago','Full-time','Onsite','Logistics World provides comprehensive logistics and supply chain solutions to clients across various industries.','The Operations Manager will oversee daily operations, manage supply chain logistics, and ensure the efficient flow of goods and services.','We are looking for an experienced Operations Manager to manage logistics and supply chain operations, ensuring timely delivery of goods.','[\"Oversee daily logistics operations\", \"Ensure efficient supply chain processes\", \"Collaborate with vendors and suppliers\", \"Manage logistics staff and warehouse operations\"]','[\"Experience in logistics and supply chain management\", \"Strong leadership and organizational skills\", \"Knowledge of logistics software\", \"Ability to manage a large team\"]','2024-09-19 10:00:00'),(9,'Human Resources Manager','PeopleFirst','Polokwane, Limpopo','3 days ago','Full-time','Hybrid','PeopleFirst is a HR consulting firm specializing in employee relations, talent acquisition, and workplace culture enhancement.','The HR Manager will manage recruitment, employee relations, and performance management to ensure a positive work environment.','We are seeking an HR Manager to lead our human resources department, focusing on recruitment, employee relations, and enhancing workplace culture.','[\"Oversee recruitment and hiring processes\", \"Manage employee relations and conflict resolution\", \"Develop and implement HR policies\", \"Lead performance management initiatives\"]','[\"Degree in Human Resources or a related field\", \"Experience in recruitment and employee relations\", \"Strong communication and leadership skills\", \"Knowledge of labor laws and HR policies\"]','2024-09-19 10:00:00'),(10,'Backend Developer','Innovative Solutions','Remote','2024-09-26','Full-time','Remote','Innovative Solutions is a forward-thinking company that specializes in cloud-based applications.','As a Backend Developer, you will be responsible for developing server-side logic, ensuring high performance and responsiveness to requests from the frontend.','We are looking for a dedicated Backend Developer to join our growing team and contribute to the development of our web applications.','[\"Develop and maintain APIs\", \"Collaborate with frontend developers to integrate user-facing elements\", \"Manage and optimize database performance\", \"Participate in code reviews and mentoring\"]','[\"Bachelor’s degree in Computer Science or related field\", \"Proven experience in backend development (Node.js, Python, etc.)\", \"Familiarity with database management systems (MySQL, PostgreSQL, etc.)\", \"Strong problem-solving skills and attention to detail\"]','2024-09-19 10:00:00');
+INSERT INTO `jobs` VALUES (1,'Software Engineer','Tech Corp','Cape Town, Western Cape','Full-time','Hybrid','Tech Corp is a leading technology company focused on delivering innovative solutions. We value creativity, collaboration, and excellence.','As a Software Engineer, you will design and develop software applications. Collaborating with a dynamic team, you will create high-quality products.','We are looking for a skilled Software Engineer to join our team. The successful candidate will work on developing high-quality applications and collaborate with other developers, designers, and product managers.','[\"Develop and maintain software applications\", \"Collaborate with cross-functional teams\", \"Participate in code reviews and contribute to team knowledge sharing\", \"Troubleshoot and debug applications\"]','[\"Bachelor?s degree in Computer Science or related field\", \"Experience with JavaScript, React, and Node.js\", \"Strong problem-solving skills\", \"Excellent communication skills\"]','2024-09-26 03:53:31',NULL),(4,'Data Scientist','Big Data Analytics','Pretoria, Gauteng','Full-time','Remote','Big Data Analytics is a global leader in data science, offering data-driven solutions to help businesses make informed decisions.','The Data Scientist will apply machine learning techniques to analyze large datasets and generate actionable insights for business improvement.','We are seeking a talented Data Scientist to work with large datasets, applying statistical models and machine learning algorithms to solve complex business problems.','[\"Analyze large datasets to discover trends\", \"Develop machine learning models\", \"Communicate findings to stakeholders\", \"Collaborate with cross-functional teams\"]','[\"Degree in Statistics, Computer Science, or related field\", \"Experience with Python, R, and SQL\", \"Knowledge of machine learning algorithms\", \"Strong communication and problem-solving skills\"]','2024-09-26 03:53:31',NULL),(6,'DevOps Engineer','Cloud Solutions','Bloemfontein, Free Statesss','Full-time','On-site','Cloud Solutions is a leader in cloud computing services, helping businesses transition to scalable and secure cloud infrastructures.','As a DevOps Engineer, you will manage the cloud infrastructure, automate deployments, and ensure the reliability of production environments.','We are seeking a DevOps Engineer to maintain and optimize our cloud infrastructure, focusing on automation, monitoring, and security.','[\"Manage cloud infrastructure (AWS, Azure, GCP)\", \"Automate software deployments and monitoring\", \"Ensure system security and scalability\", \"Collaborate with developers and IT teams\"]','[\"Experience with cloud platforms (AWS, Azure, GCP)\", \"Strong understanding of CI/CD pipelines\", \"Familiarity with Docker and Kubernetes\", \"Excellent problem-solving and communication skills\"]','2024-09-19 10:00:00','user_2llRVybvC2VnvXxm4f1GzTmUdGo'),(10,'Backend Developer','Innovative Solutions','Remote','Full-time','Remote','Innovative Solutions is a forward-thinking company that specializes in cloud-based applications.','As a Backend Developer, you will be responsible for developing server-side logic, ensuring high performance and responsiveness to requests from the frontend.','We are looking for a dedicated Backend Developer to join our growing team and contribute to the development of our web applications.','[\"Develop and maintain APIs\", \"Collaborate with frontend developers to integrate user-facing elements\", \"Manage and optimize database performance\", \"Participate in code reviews and mentoring\"]','[\"Bachelor’s degree in Computer Science or related field\", \"Proven experience in backend development (Node.js, Python, etc.)\", \"Familiarity with database management systems (MySQL, PostgreSQL, etc.)\", \"Strong problem-solving skills and attention to detail\"]','2024-09-19 10:00:00',NULL),(11,'DevOps Engineer','Cloud Solutionss','Bloemfontein, Free States','Full-time','On-site','Cloud Solutions is a leader in cloud computing services, helping businesses transition to scalable and secure cloud infrastructures.','As a DevOps Engineer, you will manage the cloud infrastructure, automate deployments, and ensure the reliability of production environments.','We are seeking a DevOps Engineer to maintain and optimize our cloud infrastructure, focusing on automation, monitoring, and security.','[\"Manage cloud infrastructure (AWS, Azure, GCP)\", \"Automate software deployments and monitoring\", \"Ensure system security and scalability\", \"Collaborate with developers and IT teams\"]','[\"Experience with cloud platforms (AWS, Azure, GCP)\", \"Strong understanding of CI/CD pipelines\", \"Familiarity with Docker and Kubernetes\", \"Excellent problem-solving and communication skills\"]','2024-10-02 14:57:23','user_2llRVybvC2VnvXxm4f1GzTmUdGo'),(14,'Job title','Company name','location','Contract','On-site','Company Desc','Role Desc','Job Desc','[\"re\"]','[\"req1\"]','2024-10-05 22:02:39',NULL),(15,'s','sas','sasa','Full-time','Hybrid','kask','wiuh','aiuhq','[\"reuqw\"]','[\"uywe\"]','2024-10-05 22:04:21',NULL),(16,'s','sas','sasa','Full-time','Hybrid','kask','wiuh','aiuhq','[\"reuqw\"]','[\"uywe\"]','2024-10-05 22:04:25',NULL),(19,'Software','Comp N','Loc N','Full-time','On-site','Comp Desc','Role desc','job Desc','[\"res1\"]','[\"Req1\"]','2024-10-06 00:07:21','user_2mct2xF74sfyViuQNRF1xT8u2by'),(20,'job nom','new','Location','Seasonal','On-site','new','new','new','[\"new\"]','[\"new\"]','2024-10-04 02:15:12','user_2mct2xF74sfyViuQNRF1xT8u2by');
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `products`
+-- Table structure for table `personal_information`
 --
 
-DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `personal_information`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `products` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `category` varchar(100) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `personal_information` (
+  `userId` varchar(255) NOT NULL,
+  `fullName` varchar(255) DEFAULT NULL,
+  `phoneNumber` varchar(20) DEFAULT NULL,
+  `emailAddress` varchar(255) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `resume` varchar(255) DEFAULT NULL,
+  `linkedInProfileLink` varchar(255) DEFAULT NULL,
+  `githubProfileLink` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`userId`),
+  CONSTRAINT `personal_information_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `products`
+-- Dumping data for table `personal_information`
 --
 
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Laptop',1200.99,'Electronics','2024-09-08 13:04:22'),(2,'Phone',699.99,'Electronics','2024-09-08 13:04:22'),(3,'Desk',199.50,'Furniture','2024-09-08 13:04:22'),(4,'Chair',85.75,'Furniture','2024-09-08 13:04:22');
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+LOCK TABLES `personal_information` WRITE;
+/*!40000 ALTER TABLE `personal_information` DISABLE KEYS */;
+INSERT INTO `personal_information` VALUES ('user_2llRVybvC2VnvXxm4f1GzTmUdGo','Sisekelo Ngcobo','0721234567','sisekeloking@gmail.com','Johannesburg, Gauteng','https://dkvy6xyit7qmdhcf.public.blob.vercel-storage.com/November%202024%20Provisional%20Timetable-VhstfYxFXpvfULYq7N3HY5tI7V6XU2.pdf','https://www.linkedin.com/in/alice-mkhize','https://github.com/alicemkhize'),('user_2mct2xF74sfyViuQNRF1xT8u2by','Marce Ngcobo','0827654321','marcengcobo@gmail.com','Durban','resume_marce.pdf','https://www.linkedin.com/in/thabo-dlamini','https://github.com/thabodlamini'),('user_2mip1EuHF2lJy2pYPuPto9otSrz','fullName','1234567890','2433205@students.wits.ac.za','City','resume','linkedInProfileLink','githubProfileLink'),('user_2mzjq8e8KtTUu2Wrm47KcYQuEA0','Sphindile','078566743','sphindilengcobo302@gmail.com','Port Sheptone','https://dkvy6xyit7qmdhcf.public.blob.vercel-storage.com/Project%20Summary%20(2)-9SQn6W5qHLQPyMGbKCbCwo5EVJBdOo.pdf','linkedInProfileLink','githubProfileLink'),('user_2n84dm3v2r0lQV2b70jwT5xWFhU','fullName','1234567890','sisekeloking@gmail.com','City','resume','linkedInProfileLink','githubProfileLink');
+/*!40000 ALTER TABLE `personal_information` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `portfolio`
+--
+
+DROP TABLE IF EXISTS `portfolio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `portfolio` (
+  `projectId` int NOT NULL AUTO_INCREMENT,
+  `userId` varchar(255) NOT NULL,
+  `projectTitle` varchar(255) DEFAULT NULL,
+  `projectLink` varchar(255) DEFAULT NULL,
+  `projectDescription` text,
+  PRIMARY KEY (`projectId`),
+  KEY `portfolio_ibfk_1` (`userId`),
+  CONSTRAINT `portfolio_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `portfolio`
+--
+
+LOCK TABLES `portfolio` WRITE;
+/*!40000 ALTER TABLE `portfolio` DISABLE KEYS */;
+INSERT INTO `portfolio` VALUES (74,'user_2mzjq8e8KtTUu2Wrm47KcYQuEA0','projectTitle','projectLink','projectDescription'),(87,'user_2mct2xF74sfyViuQNRF1xT8u2by','Data Analysis Dashboard','https://data-insights-dashboard.com','Created an interactive data visualization dashboard using Python and Power BI, displaying insights on company sales and customer behavior.'),(88,'user_2mct2xF74sfyViuQNRF1xT8u2by','IT Support Knowledge Base','https://itsupport-docs.com','Developed a knowledge base for IT support documentation using WordPress, allowing technicians to easily access troubleshooting guides.'),(89,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','E-commerce Website','https://ecommerce-example.com','Developed a fully-functional e-commerce platform using React, Node.js, and MySQL. The platform supports user authentication, product browsing, and secure payments.'),(90,'user_2mip1EuHF2lJy2pYPuPto9otSrz','projectTitle','projectLink','projectDescription'),(91,'user_2n84dm3v2r0lQV2b70jwT5xWFhU','projectTitle','projectLink','projectDescription');
+/*!40000 ALTER TABLE `portfolio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `skills`
+--
+
+DROP TABLE IF EXISTS `skills`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `skills` (
+  `userId` varchar(255) NOT NULL,
+  `skills` json DEFAULT NULL,
+  PRIMARY KEY (`userId`),
+  CONSTRAINT `skills_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `skills`
+--
+
+LOCK TABLES `skills` WRITE;
+/*!40000 ALTER TABLE `skills` DISABLE KEYS */;
+INSERT INTO `skills` VALUES ('user_2llRVybvC2VnvXxm4f1GzTmUdGo','[\"React\", \"Node.js\", \"MySQL\", \"TypeScript\"]'),('user_2mct2xF74sfyViuQNRF1xT8u2by','[\"Python\", \"Data Analysis\", \"Power BI\", \"SQL\"]'),('user_2mip1EuHF2lJy2pYPuPto9otSrz','[\"skill1\"]'),('user_2mzjq8e8KtTUu2Wrm47KcYQuEA0','[\"skill1\"]'),('user_2n84dm3v2r0lQV2b70jwT5xWFhU','[\"skill1\"]');
+/*!40000 ALTER TABLE `skills` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_applications`
+--
+
+DROP TABLE IF EXISTS `user_applications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_applications` (
+  `applicationId` int NOT NULL AUTO_INCREMENT,
+  `jobId` int DEFAULT NULL,
+  `userId` varchar(255) NOT NULL,
+  `status` enum('Pending','Accepted','Rejected','Under Review') DEFAULT 'Pending',
+  `appliedDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`applicationId`),
+  KEY `jobId` (`jobId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `user_applications_ibfk_1` FOREIGN KEY (`jobId`) REFERENCES `jobs` (`jobId`) ON DELETE CASCADE,
+  CONSTRAINT `user_applications_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_applications`
+--
+
+LOCK TABLES `user_applications` WRITE;
+/*!40000 ALTER TABLE `user_applications` DISABLE KEYS */;
+INSERT INTO `user_applications` VALUES (1,1,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','Pending','2024-09-15 10:00:00'),(4,4,'user_2mct2xF74sfyViuQNRF1xT8u2by','Pending','2024-09-22 09:20:00'),(6,6,'user_2mct2xF74sfyViuQNRF1xT8u2by','Pending','2024-09-24 12:50:00'),(8,4,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','Pending','2024-10-05 00:47:08'),(9,6,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','Pending','2024-10-05 00:51:12'),(12,19,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','Pending','2024-10-06 02:08:04'),(13,20,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','Rejected','2024-10-06 02:16:33'),(15,1,'user_2mct2xF74sfyViuQNRF1xT8u2by','Pending','2024-10-07 03:13:04');
+/*!40000 ALTER TABLE `user_applications` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -89,6 +237,7 @@ CREATE TABLE `users` (
   `fullName` varchar(255) NOT NULL,
   `role` enum('user','employer') DEFAULT 'user',
   `imageUrl` varchar(255) DEFAULT NULL,
+  `emailAddress` varchar(255) NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -99,8 +248,39 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('user_2llRVybvC2VnvXxm4f1GzTmUdGo','Sisekelo Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybGxSVndEbzJrem5hb1pwSnFPS1J6dzBOaGwifQ');
+INSERT INTO `users` VALUES ('user_2llKLzn394t608a6dnghAbG1kKN','Sisekelo Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybGxLTHlaZGR4b0I3MXEwRUpXbmI1cWhBTE4ifQ','sisekelongcobo12@gmail.com'),('user_2llRVybvC2VnvXxm4f1GzTmUdGo','Sisekelo Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybGxSVndEbzJrem5hb1pwSnFPS1J6dzBOaGwifQ','sisekeloking@gmail.com'),('user_2mct2xF74sfyViuQNRF1xT8u2by','Marce Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybWN0MzdvNjlnV3J2SHZFU1RLamMyejN1dWYifQ','marcengcobo@gmail.com'),('user_2md4weEpvroyMW7vce9rCEfZ5Zt','Yereba Boo','user','https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ybGxIc1JDYU5haUtHQm5YcmJYN1lGNktWQm0iLCJyaWQiOiJ1c2VyXzJtZDR3ZUVwdnJveU1XN3ZjZTlyQ0VmWjVadCIsImluaXRpYWxzIjoiWUIifQ','yereba3833@abevw.com'),('user_2mip1EuHF2lJy2pYPuPto9otSrz','Mhleli Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ybWlwMUI4Nnlkc1lOQ0tYSFMxM3BCT1U2MlMifQ','2433205@students.wits.ac.za'),('user_2mzjq8e8KtTUu2Wrm47KcYQuEA0','Sphindile Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybXpqcTVaTHh2Z2VvME5ZRDZtTEk1eHU1SEUifQ','sphindilengcobo302@gmail.com'),('user_2n84dm3v2r0lQV2b70jwT5xWFhU','Sisekelo Ngcobo','user','https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybjg0ZHFEWVp4OEJjek01UTNuM1NMNDlPdHEifQ','sisekeloking@gmail.com');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `work_experience`
+--
+
+DROP TABLE IF EXISTS `work_experience`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `work_experience` (
+  `experienceId` int NOT NULL AUTO_INCREMENT,
+  `userId` varchar(255) NOT NULL,
+  `jobTitle` varchar(255) DEFAULT NULL,
+  `company` varchar(255) DEFAULT NULL,
+  `startDate` date DEFAULT NULL,
+  `endDate` date DEFAULT NULL,
+  `responsibilities` text,
+  PRIMARY KEY (`experienceId`),
+  KEY `work_experience_ibfk_1` (`userId`),
+  CONSTRAINT `work_experience_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `work_experience`
+--
+
+LOCK TABLES `work_experience` WRITE;
+/*!40000 ALTER TABLE `work_experience` DISABLE KEYS */;
+INSERT INTO `work_experience` VALUES (65,'user_2mzjq8e8KtTUu2Wrm47KcYQuEA0','jobTitle','company','2021-12-30','2021-12-30','responsibilities'),(77,'user_2mct2xF74sfyViuQNRF1xT8u2by','jobTitle','company','2021-12-27','2021-12-27','responsibilities'),(78,'user_2llRVybvC2VnvXxm4f1GzTmUdGo','Job Title','Company','2024-09-07','2024-09-28','re'),(79,'user_2mip1EuHF2lJy2pYPuPto9otSrz','jobTitle','company','2022-01-01','2022-01-01','responsibilities'),(80,'user_2n84dm3v2r0lQV2b70jwT5xWFhU','jobTitle','company','2022-01-01','2022-01-01','responsibilities');
+/*!40000 ALTER TABLE `work_experience` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -112,4 +292,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-26  6:40:52
+-- Dump completed on 2024-10-08  1:00:31

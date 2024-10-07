@@ -4,14 +4,16 @@ const router = express.Router();
 
 router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
-    const { userId } = req.auth;
-
+    let { userId } = req.auth;
+    if (!userId) {
+      userId = req.auth.sessionClaims.sub;
+      return res.status(401).json({ error: "Unauthorized, no userId found" });
+    }
     const user = await clerkClient.users.getUser(userId);
     const fullName = user.fullName || user.firstName || "Unknown";
     const imageUrl = user.imageUrl;
     const emailAddress = user.emailAddresses[0].emailAddress;
 
-    // Check if the user exists in the main users table
     req.db.query("SELECT * FROM users WHERE userId = ?", [userId], async (err, result) => {
       if (err) return next(err);
 

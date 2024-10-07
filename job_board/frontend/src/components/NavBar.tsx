@@ -23,7 +23,7 @@ export const NavBar: React.FC = () => {
   const { signOut } = useClerk();
 
   const fetchUser = () => {
-    const url = import.meta.env.VITE_API_URL + "/users/user-data";
+    const url = import.meta.env.VITE_API_URL + `/users/user-data`;
     fetch(url, {
       method: "GET",
       headers: {
