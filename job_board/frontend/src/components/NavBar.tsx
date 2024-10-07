@@ -46,10 +46,6 @@ export const NavBar: React.FC = () => {
     }
   }, [isSignedIn]);
 
-  if (!user) {
-    return <LoadingIndicator />;
-  }
-
   const handleLoginClick = () => {
     navigate("/sign-in");
   };
