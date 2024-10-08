@@ -3,10 +3,9 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/pending-applicants", ClerkExpressRequireAuth(), async (req, res, next) => {
+router.get("/pending-applicants", async (req, res, next) => {
   try {
-    const user = req.auth;
-    const userId = user?.userId;
+    const {userId} = req.query
 
     // SQL query to fetch pending applications with applicant's full name
     const query = `
@@ -29,10 +28,9 @@ router.get("/pending-applicants", ClerkExpressRequireAuth(), async (req, res, ne
   }
 });
 
-router.get("/approved-applicants", ClerkExpressRequireAuth(), async (req, res, next) => {
+router.get("/approved-applicants",  async (req, res, next) => {
   try {
-    const user = req.auth;
-    const userId = user?.userId;
+    const {userId} = req.query
 
     // SQL query to fetch pending applications with applicant's full name
     const query = `

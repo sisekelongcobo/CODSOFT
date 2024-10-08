@@ -15,6 +15,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { TimeAgo } from "../../../components/TimeAgo";
 import { Applicant } from "../../../interface";
+import { useClerk } from "@clerk/clerk-react";
 
 export const ApproveApplications: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,12 +25,13 @@ export const ApproveApplications: React.FC = () => {
   const [interviewDate, setInterviewDate] = useState<string>("");
   const [interviewTime, setInterviewTime] = useState<string>("");
   const [error, setError] = useState<{ interviewDate?: string; interviewTime?: string }>({});
-
+  const {user} = useClerk();
+  const userId = user?.id;
   const rowsPerPage = 5;
   const applicantCount = applicants?.length ?? 0;
 
   const fetchApplicants = async () => {
-    const url = import.meta.env.VITE_API_URL + "/employer/approved-applicants";
+    const url = import.meta.env.VITE_API_URL + `/employer/approved-applicants?userId=${userId}`;
     try {
       const response = await fetch(url, {
         method: "GET",

@@ -1,3 +1,4 @@
+import { useClerk } from "@clerk/clerk-react";
 import { Box, Button, Card, CardContent, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,9 +10,11 @@ export const PendingApplications: React.FC = () => {
   const [applicants, setApplicants] = useState<Application[]>([]);
   const rowsPerPage = 5;
   const applicantCount = applicants?.length ?? 0;
+  const { user } = useClerk();
+  const userId = user?.id;
 
   const fetchApplicants = async () => {
-    const url = import.meta.env.VITE_API_URL + "/employer/pending-applicants";
+    const url = import.meta.env.VITE_API_URL + `/employer/pending-applicants?userId=${userId}`;
     try {
       const response = await fetch(url, {
         method: "GET",

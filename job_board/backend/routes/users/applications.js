@@ -3,9 +3,9 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/applications", ClerkExpressRequireAuth(), async (req, res, next) => {
+router.get("/applications", async (req, res, next) => {
   try {
-    const { userId } = req.auth;
+    const { userId } = req.query;
 
     const query = `
       SELECT 

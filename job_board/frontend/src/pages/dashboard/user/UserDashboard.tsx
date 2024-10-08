@@ -1,3 +1,4 @@
+import { useClerk } from "@clerk/clerk-react";
 import {
   Box,
   Button,
@@ -16,13 +17,12 @@ import { useNavigate } from "react-router-dom";
 import { ErrorNotification } from "../../../components/ErrorNotification";
 import { TimeAgo } from "../../../components/TimeAgo";
 import { Job } from "../../../interface";
-import { useClerk } from "@clerk/clerk-react";
 
 export const CandidateDashboard: React.FC = () => {
   const [userData, setUserData] = useState({ fullName: "", role: "", imageUrl: "", userId: "" });
   const navigate = useNavigate();
   const [appliedJobs, setAppliedJobs] = useState<Job[]>();
-  const {user } = useClerk();
+  const { user } = useClerk();
   const userId = user?.id;
 
   const handleUpdateProfile = () => {
@@ -47,7 +47,7 @@ export const CandidateDashboard: React.FC = () => {
   };
 
   const fetchAppliedJobs = () => {
-    const url = import.meta.env.VITE_API_URL + "/users/applications";
+    const url = import.meta.env.VITE_API_URL + `/users/applications?userId=${userId}`;
     fetch(url, {
       method: "GET",
       headers: {
