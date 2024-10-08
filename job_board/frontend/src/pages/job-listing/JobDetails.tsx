@@ -91,7 +91,7 @@ export const JobDetailPage: React.FC = () => {
 
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
             <Button variant="outlined" onClick={() => navigate(-1)}>
-              Back to Previous Page
+              Back
             </Button>
             <Button
               variant="contained"

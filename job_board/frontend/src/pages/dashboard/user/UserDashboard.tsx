@@ -70,66 +70,67 @@ export const CandidateDashboard: React.FC = () => {
     fetchAppliedJobs();
   }, []);
 
-  if (!userData) {
-    return (
-      <ErrorNotification
-        errorMessage="You need to be signed in to view this page."
-        onRetry={() => navigate("/sign-in")}
-      />
-    );
-  }
   return (
-    <Container sx={{ mt: 4 }}>
-      <Typography variant="h2" sx={{ fontWeight: "bold", mb: 4 }}>
-        Candidate Dashboard
-      </Typography>
+    <>
+      {!userData ? (
+        <ErrorNotification
+          errorMessage="You need to be signed in to view this page."
+          onRetry={() => navigate("/sign-in")}
+        />
+      ) : (
+        <Container sx={{ mt: 4 }}>
+          <Typography variant="h2" sx={{ fontWeight: "bold", mb: 4 }}>
+            Candidate Dashboard
+          </Typography>
 
-      <Box sx={{ mb: 4 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ color: "white" }}
-          onClick={handleUpdateProfile}
-        >
-          Update Profile
-        </Button>
-      </Box>
+          <Box sx={{ mb: 4 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ color: "white" }}
+              onClick={handleUpdateProfile}
+            >
+              Update Profile
+            </Button>
+          </Box>
 
-      <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-        Applied Jobs
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Job Title</TableCell>
-              <TableCell>Company</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Applied Date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {appliedJobs?.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4}>
-                  <Typography variant="h6">You have not applied to any jobs yet.</Typography>
-                </TableCell>
-              </TableRow>
-            ) : (
-              appliedJobs?.map((job) => (
-                <TableRow key={job.jobId}>
-                  <TableCell>{job.title}</TableCell>
-                  <TableCell>{job.company}</TableCell>
-                  <TableCell>{job.status}</TableCell>
-                  <TableCell>
-                    <TimeAgo timestamp={job.appliedDate as string} />
-                  </TableCell>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+            Applied Jobs
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Job Title</TableCell>
+                  <TableCell>Company</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Applied Date</TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+              </TableHead>
+              <TableBody>
+                {appliedJobs?.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4}>
+                      <Typography variant="h6">You have not applied to any jobs yet.</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  appliedJobs?.map((job) => (
+                    <TableRow key={job.jobId}>
+                      <TableCell>{job.title}</TableCell>
+                      <TableCell>{job.company}</TableCell>
+                      <TableCell>{job.status}</TableCell>
+                      <TableCell>
+                        <TimeAgo timestamp={job.appliedDate as string} />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Container>
+      )}
+    </>
   );
 };

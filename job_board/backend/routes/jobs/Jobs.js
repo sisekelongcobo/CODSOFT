@@ -33,6 +33,14 @@ router.get("/new-jobs", async (req, res, next) => {
       "SELECT * FROM jobs WHERE createdAt > DATE_SUB(NOW(), INTERVAL 10 DAY)",
       (err, result) => {
         if (err) return next(err);
+        if (!result.length) {
+          req.db.query(
+            "SELECT * FROM jobs WHERE createdAt > DATE_SUB(NOW(), INTERVAL 20 DAY)",
+            (err, result) => {
+              if (err) return next(err);
+            },
+          );
+        }
 
         res.json(result);
       },

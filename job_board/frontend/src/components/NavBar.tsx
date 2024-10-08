@@ -14,16 +14,18 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import theme from "../theme";
+import { Job } from "../interface";
+import { theme } from "../theme";
 
 export const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
   const { signOut } = useClerk();
   const { user } = useClerk();
   const userId = user?.id;
-
 
   const fetchUser = () => {
     const url = import.meta.env.VITE_API_URL + `/users/user-data`;
@@ -36,13 +38,46 @@ export const NavBar: React.FC = () => {
       body: JSON.stringify({ userId }),
     })
       .then((response) => response.json())
-      // .then((data) => console.log("Fetched user data:", data))
       .catch((error) => console.error("Error fetching user data:", error));
+  };
+
+  const fetchMyJobs = () => {
+    const url = import.meta.env.VITE_API_URL + `/jobs/my-jobs?userId=${userId}`;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setJobs(data);
+      })
+      .catch((error) => console.error("Error fetching jobs:", error));
+  };
+
+  const fetchMyApplications = () => {
+    const url = import.meta.env.VITE_API_URL + `/users/applications?userId=${userId}`;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setApplications(data);
+      })
+      .catch((error) => console.error("Error fetching applications:", error));
   };
 
   useEffect(() => {
     if (isSignedIn) {
       fetchUser();
+      fetchMyJobs();
+      fetchMyApplications();
     }
   }, [isSignedIn]);
 
@@ -69,20 +104,44 @@ export const NavBar: React.FC = () => {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {isSignedIn ? (
               <>
-                {["Home", "Job Listings", "Employer Dashboard", "Candidate Dashboard"].map(
-                  (menu) => (
-                    <Button
-                      key={menu}
-                      color="inherit"
-                      sx={{ mx: 1, color: "white" }}
-                      onClick={() => handleMenuClick(`/${menu.toLowerCase().replace(/\s/g, "-")}`)}
-                    >
-                      {menu}
-                    </Button>
-                  ),
-                )}
                 <Button
-                  key={"signout"}
+                  color="inherit"
+                  sx={{ mx: 1, color: "white" }}
+                  onClick={() => handleMenuClick("/home")}
+                >
+                  Home
+                </Button>
+                <Button
+                  color="inherit"
+                  sx={{ mx: 1, color: "white" }}
+                  onClick={() => handleMenuClick("/job-listings")}
+                >
+                  Job Listings
+                </Button>
+
+                {/* Conditionally render Employer Dashboard */}
+                {jobs.length > 0 && (
+                  <Button
+                    color="inherit"
+                    sx={{ mx: 1, color: "white" }}
+                    onClick={() => handleMenuClick("/employer-dashboard")}
+                  >
+                    Employer Dashboard
+                  </Button>
+                )}
+
+                {/* Conditionally render Candidate Dashboard */}
+                {applications.length > 0 && (
+                  <Button
+                    color="inherit"
+                    sx={{ mx: 1, color: "white" }}
+                    onClick={() => handleMenuClick("/candidate-dashboard")}
+                  >
+                    Candidate Dashboard
+                  </Button>
+                )}
+
+                <Button
                   color="inherit"
                   sx={{ color: "white", mx: 1 }}
                   onClick={() => signOut({ redirectUrl: "/home" })}
@@ -108,6 +167,7 @@ export const NavBar: React.FC = () => {
         </Toolbar>
       </AppBar>
 
+      {/* Mobile Drawer */}
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
         <Box
           sx={{ width: 250 }}
@@ -116,16 +176,43 @@ export const NavBar: React.FC = () => {
           onKeyDown={handleDrawerToggle}
         >
           <List>
-            {["Home", "Job Listings", "Employer Dashboard", "Candidate Dashboard"].map((menu) => (
+            <ListItem
+              component={"button"}
+              sx={{ backgroundColor: theme.palette.background.paper, border: "none" }}
+              onClick={() => handleMenuClick("/home")}
+            >
+              <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem
+              component={"button"}
+              sx={{ backgroundColor: theme.palette.background.paper, border: "none" }}
+              onClick={() => handleMenuClick("/job-listings")}
+            >
+              <ListItemText primary="Job Listings" />
+            </ListItem>
+
+            {/* Conditionally render Employer Dashboard in mobile */}
+            {jobs.length > 0 && (
               <ListItem
                 component={"button"}
                 sx={{ backgroundColor: theme.palette.background.paper, border: "none" }}
-                key={menu}
-                onClick={() => handleMenuClick(`/${menu.toLowerCase().replace(/\s/g, "-")}`)}
+                onClick={() => handleMenuClick("/employer-dashboard")}
               >
-                <ListItemText primary={menu} />
+                <ListItemText primary="Employer Dashboard" />
               </ListItem>
-            ))}
+            )}
+
+            {/* Conditionally render Candidate Dashboard in mobile */}
+            {applications.length > 0 && (
+              <ListItem
+                component={"button"}
+                sx={{ backgroundColor: theme.palette.background.paper, border: "none" }}
+                onClick={() => handleMenuClick("/candidate-dashboard")}
+              >
+                <ListItemText primary="Candidate Dashboard" />
+              </ListItem>
+            )}
+
             {isSignedIn && (
               <ListItem
                 component={"button"}

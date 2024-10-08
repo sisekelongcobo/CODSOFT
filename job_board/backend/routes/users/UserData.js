@@ -89,15 +89,15 @@ router.post("/user-data", async (req, res, next) => {
       const workExperienceData = {
         jobTitle: "jobTitle",
         company: "company",
-        startDate: "2022-01-01",
-        endDate: "2022-01-01",
+        startDate: "1900-01-01",
+        endDate: "1900-01-01",
         responsibilities: "responsibilities",
       };
 
       const educationData = {
         degree: "degree",
         institution: "institution",
-        completionDate: "2022-01-01",
+        completionDate: "1900-01-01",
       };
 
       // Perform upserts

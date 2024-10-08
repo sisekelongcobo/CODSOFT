@@ -14,7 +14,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
-import theme from "../../../theme";
+import { theme } from "../../../theme";
 
 export const NewJobForm = () => {
   const [workMode, setWorkMode] = useState<string>("");

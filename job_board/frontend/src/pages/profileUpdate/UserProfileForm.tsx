@@ -20,7 +20,7 @@ import { ErrorNotification } from "../../components/ErrorNotification";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
 import { Notification } from "../../components/Notification";
 import { Project, UserProfile } from "../../interface";
-import theme from "../../theme";
+import { theme } from "../../theme";
 
 export const CandidateProfileUpdate: React.FC = () => {
   const [updatedData, setUpdatedData] = useState<UserProfile>({
@@ -233,20 +233,42 @@ export const CandidateProfileUpdate: React.FC = () => {
       validationErrors.githubProfileLink = "GitHub profile link is required";
     }
 
-    if (!updatedData.resume) {
+    if (!updatedData.resume || updatedData.resume === "" || updatedData.resume === "resume") {
       validationErrors.resume = "Resume is required";
     }
 
-    if (updatedData.skills.length === 0) {
+    if (updatedData.skills.length === 0 || updatedData.skills[0] === "skill1") {
       validationErrors.skills = "At least one skill is required";
     }
 
-    if (updatedData.education.length === 0) {
-      validationErrors.education = "All Education fields are required";
+    for (const education of updatedData.education) {
+      if (
+        education.degree === "" ||
+        education.degree === "degree" ||
+        education.institution === "" ||
+        education.institution === "institution" ||
+        education.completionDate === "" ||
+        education.completionDate === "1900-01-01"
+      ) {
+        validationErrors.education = "All Education fields are required";
+      }
     }
 
-    if (updatedData.experience.length === 0) {
-      validationErrors.experience = "All Experience fields are required";
+    for (const experience of updatedData.experience) {
+      if (
+        experience.jobTitle === "" ||
+        experience.jobTitle === "jobTitle" ||
+        experience.company === "" ||
+        experience.company === "company" ||
+        experience.startDate === "" ||
+        experience.startDate === "1900-01-01" ||
+        experience.endDate === "" ||
+        experience.endDate === "1900-01-01" ||
+        experience.responsibilities === "" ||
+        experience.responsibilities === "responsibilities"
+      ) {
+        validationErrors.experience = "All Experience fields are required";
+      }
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -441,9 +463,16 @@ export const CandidateProfileUpdate: React.FC = () => {
                   {selectedFile ? "Change Resume" : "Upload Resume"}
                   <input type="file" hidden accept="application/pdf" onChange={handleFileUpload} />
                 </Button>
+
                 {selectedFile && (
                   <Typography variant="body2" sx={{ mt: 2 }}>
                     Uploaded: {selectedFile.name}
+                  </Typography>
+                )}
+
+                {error.resume && (
+                  <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                    {error.resume}
                   </Typography>
                 )}
               </Box>

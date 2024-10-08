@@ -1,13 +1,14 @@
 import { Box, Button, Container, Grid, Paper, Typography, useMediaQuery } from "@mui/material";
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import theme from "../../theme";
+import { theme } from "../../theme";
 import { FeaturedJobs } from "./FeaturedJobs";
 import { NewJobs } from "./NewJobs";
 
 export const HomePage: React.FC = () => {
   const featuredJobsRef = useRef<HTMLDivElement | null>(null);
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
   const handleExploreClick = () => {
@@ -32,21 +33,7 @@ export const HomePage: React.FC = () => {
           backgroundPosition: "center",
         }}
       >
-        <video
-          autoPlay
-          loop
-          muted
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            top: 0,
-            left: 0,
-            zIndex: -1, // Push the video behind the content
-          }}
-        >
-          <source src="/v1.mp4" type="video/mp4" />
+        {isMobile ? (
           <img
             src="/banner.jpg"
             alt="Fallback background"
@@ -60,7 +47,25 @@ export const HomePage: React.FC = () => {
               zIndex: -1,
             }}
           />
-        </video>
+        ) : (
+          <video
+            autoPlay
+            loop
+            muted
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              top: 0,
+              left: 0,
+              zIndex: -1, // Push the video behind the content
+            }}
+          >
+            <source src="/v1.mp4" type="video/mp4" />
+          </video>
+        )}
+
         <Box
           sx={{
             position: "absolute",
@@ -145,10 +150,6 @@ export const HomePage: React.FC = () => {
         >
           Post a Job Now
         </Button>
-        {/* <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
-          @ts-ignore
-          <NewJobForm handleClose={handleCloseModal} />
-        </Dialog> */}
       </Box>
     </>
   );
