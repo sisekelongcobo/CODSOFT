@@ -2,13 +2,9 @@ import { clerkClient, ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 const router = express.Router();
 
-router.post("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
+router.post("/user-data", async (req, res, next) => {
   try {
-    let { userId } = req.auth;
-    if (!userId) {
-      userId = req.auth.sessionClaims.sub;
-      return res.status(401).json({ error: "Unauthorized, no userId found" });
-    }
+    const { userId } = req.body;
 
     const user = await clerkClient.users.getUser(userId);
     const fullName = user.fullName || user.firstName || "Unknown";

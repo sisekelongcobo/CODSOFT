@@ -217,6 +217,22 @@ export const CandidateProfileUpdate: React.FC = () => {
       validationErrors.emailAddress = "Email address is required";
     }
 
+    if (
+      !updatedData.linkedInProfileLink ||
+      updatedData.linkedInProfileLink === "" ||
+      updatedData.linkedInProfileLink === "linkedInProfileLink"
+    ) {
+      validationErrors.linkedInProfileLink = "LinkedIn profile link is required";
+    }
+
+    if (
+      !updatedData.githubProfileLink ||
+      updatedData.githubProfileLink === "" ||
+      updatedData.githubProfileLink === "githubProfileLink"
+    ) {
+      validationErrors.githubProfileLink = "GitHub profile link is required";
+    }
+
     if (!updatedData.resume) {
       validationErrors.resume = "Resume is required";
     }

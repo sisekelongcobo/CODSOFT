@@ -16,12 +16,14 @@ import { useNavigate } from "react-router-dom";
 import { ErrorNotification } from "../../../components/ErrorNotification";
 import { TimeAgo } from "../../../components/TimeAgo";
 import { Job } from "../../../interface";
+import { useClerk } from "@clerk/clerk-react";
 
 export const CandidateDashboard: React.FC = () => {
   const [userData, setUserData] = useState({ fullName: "", role: "", imageUrl: "", userId: "" });
   const navigate = useNavigate();
-
   const [appliedJobs, setAppliedJobs] = useState<Job[]>();
+  const {user } = useClerk();
+  const userId = user?.id;
 
   const handleUpdateProfile = () => {
     navigate("/update-profile");
@@ -30,11 +32,12 @@ export const CandidateDashboard: React.FC = () => {
   const fetchUser = () => {
     const url = import.meta.env.VITE_API_URL + "/users/user-data";
     fetch(url, {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
+      body: JSON.stringify({ userId }),
     })
       .then((response) => response.json())
       .then((data) => {
