@@ -10,7 +10,7 @@ import { EditJobDetails } from "./pages/dashboard/employer/EditJobDetails";
 import { EmployerDashboard } from "./pages/dashboard/employer/EmployerDashboard";
 import { NewJobForm } from "./pages/dashboard/employer/NewJobForm";
 import { ApplicationDetail } from "./pages/dashboard/user/ApplicationDetails";
-import NotifyUserForm from "./pages/dashboard/user/NotifyUserForm";
+import { NotifyUserForm } from "./pages/dashboard/user/NotifyUserForm";
 import { CandidateDashboard } from "./pages/dashboard/user/UserDashboard";
 import { HomePage } from "./pages/home/HomePage";
 import { UserProfileForm } from "./pages/job-listing/Apply";

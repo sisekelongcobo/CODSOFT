@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NotifyUserForm: React.FC = () => {
+export const NotifyUserForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
   const [responseMessage, setResponseMessage] = useState<string>("");
@@ -59,5 +59,3 @@ const NotifyUserForm: React.FC = () => {
     </div>
   );
 };
-
-export default NotifyUserForm;
