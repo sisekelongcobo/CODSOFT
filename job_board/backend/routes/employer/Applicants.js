@@ -1,11 +1,10 @@
-import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 
 const router = express.Router();
 
 router.get("/pending-applicants", async (req, res, next) => {
   try {
-    const {userId} = req.query
+    const { userId } = req.query;
 
     // SQL query to fetch pending applications with applicant's full name
     const query = `
@@ -28,9 +27,9 @@ router.get("/pending-applicants", async (req, res, next) => {
   }
 });
 
-router.get("/approved-applicants",  async (req, res, next) => {
+router.get("/approved-applicants", async (req, res, next) => {
   try {
-    const {userId} = req.query
+    const { userId } = req.query;
 
     // SQL query to fetch pending applications with applicant's full name
     const query = `

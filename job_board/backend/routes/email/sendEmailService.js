@@ -65,7 +65,7 @@ router.post("/new-applicant", async (req, res) => {
       if (err) {
         return res.status(500).send({ message: "Error fetching employer email" });
       }
-      if(result.length === 0) {
+      if (result.length === 0) {
         return;
       }
       employerEmail = result[0].employerEmail;

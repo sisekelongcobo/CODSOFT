@@ -1,3 +1,4 @@
+import { useClerk } from "@clerk/clerk-react";
 import {
   Box,
   Button,
@@ -31,6 +32,8 @@ export const NewJobForm = () => {
     requirements: [""],
   });
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { user } = useClerk();
+  const userId = user?.id;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setJobData({
@@ -68,7 +71,7 @@ export const NewJobForm = () => {
 
   const handleSubmit = () => {
     try {
-      const url = import.meta.env.VITE_API_URL + "/jobs/create-job";
+      const url = import.meta.env.VITE_API_URL + `/jobs/create-job?userId=${userId}`;
       fetch(url, {
         method: "POST",
         headers: {

@@ -1,3 +1,4 @@
+import { useClerk } from "@clerk/clerk-react";
 import {
   Box,
   Button,
@@ -48,6 +49,8 @@ export const EmployerDashboard: React.FC = () => {
   const [myJobOpenings, setMyJobOpenings] = useState<Job[]>([]);
   const jobsPerPage = 6;
   const navigate = useNavigate();
+  const { user } = useClerk();
+  const userId = user?.id;
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
@@ -55,7 +58,7 @@ export const EmployerDashboard: React.FC = () => {
   const jobCount = myJobOpenings?.length ?? 0;
 
   const fetchJobs = async () => {
-    const url = import.meta.env.VITE_API_URL + `/jobs/my-jobs`;
+    const url = import.meta.env.VITE_API_URL + `/jobs/my-jobs?userId=${userId}`;
     fetch(url, {
       method: "GET",
       headers: {

@@ -1,4 +1,3 @@
-import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 
 const router = express.Router();
@@ -15,10 +14,9 @@ router.get("/all-jobs", async (req, res, next) => {
   }
 });
 
-router.get("/my-jobs/",ClerkExpressRequireAuth(), async (req, res, next) => {
+router.get("/my-jobs", async (req, res, next) => {
   try {
-    const user = req.auth;
-    const userId = user?.userId;
+    const { userId } = req.query;
 
     req.db.query("SELECT * FROM jobs WHERE userId = ?", [userId], (err, result) => {
       if (err) return next(err);
@@ -44,10 +42,9 @@ router.get("/new-jobs", async (req, res, next) => {
   }
 });
 
-router.post("/create-job",ClerkExpressRequireAuth(), async (req, res, next) => {
+router.post("/create-job", async (req, res, next) => {
   try {
-    const user = req.auth;
-    const userId = user?.userId;
+    const { userId } = req.query;
 
     const {
       title,
@@ -71,7 +68,7 @@ router.post("/create-job",ClerkExpressRequireAuth(), async (req, res, next) => {
       !workMode ||
       !companyDescription ||
       !roleDescription ||
-      !jobDescription 
+      !jobDescription
     ) {
       return res.status(400).json({ error: "All required fields must be filled out." });
     }
@@ -116,7 +113,7 @@ router.post("/create-job",ClerkExpressRequireAuth(), async (req, res, next) => {
   }
 });
 
-router.delete("/delete-job/:jobId", ClerkExpressRequireAuth(), async (req, res, next) => {
+router.delete("/delete-job/:jobId", async (req, res, next) => {
   try {
     const { jobId } = req.params;
 

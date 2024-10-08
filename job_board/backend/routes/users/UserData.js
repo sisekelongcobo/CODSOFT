@@ -1,4 +1,4 @@
-import { clerkClient, ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import express from "express";
 const router = express.Router();
 
