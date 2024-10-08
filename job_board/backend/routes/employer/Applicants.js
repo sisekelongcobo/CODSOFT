@@ -90,7 +90,7 @@ router.post("/applicants/:userId/:jobId", async (req, res, next) => {
   }
 });
 
-router.put("/applicants/confirm:userId/:jobId", async (req, res, next) => {
+router.put("/applicants/confirm/:userId/:jobId", async (req, res, next) => {
   try {
     const { userId, jobId } = req.params;
 

@@ -25,15 +25,7 @@ export const ApplicantDetails: React.FC = () => {
       });
 
       if (!response.ok) {
-        // throw new Error(`Error accepting applicant: ${response.statusText}`);
-        return (
-          <Notification
-            showNotification={showNotification}
-            handleCloseNotification={handleCloseNotification}
-            isRejected={isRejected}
-            message={`Error accepting applicant: ${response.statusText}`}
-          />
-        );
+        throw new Error(`Error accepting applicant: ${response.statusText}`);
       }
 
       sendNotificationEmailApplicationAccepted();
