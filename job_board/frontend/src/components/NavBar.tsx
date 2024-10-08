@@ -21,19 +21,22 @@ export const NavBar: React.FC = () => {
   const { isSignedIn } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { signOut } = useClerk();
+  console.log("isSignedIn:", isSignedIn);
 
   const fetchUser = () => {
     const url = import.meta.env.VITE_API_URL + `/users/user-data`;
+    console.log("Fetching user data from:", url);
     fetch(url, {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
     })
       .then((response) => response.json())
+      // .then((data) => console.log("Fetched user data:", data))
       .catch((error) => console.error("Error fetching user data:", error));
-  };
+  };  
 
   useEffect(() => {
     if (isSignedIn) {

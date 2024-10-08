@@ -2,31 +2,38 @@ import { clerkClient, ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 import express from "express";
 const router = express.Router();
 
-router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
+router.post("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
   try {
     let { userId } = req.auth;
     if (!userId) {
       userId = req.auth.sessionClaims.sub;
       return res.status(401).json({ error: "Unauthorized, no userId found" });
     }
+
     const user = await clerkClient.users.getUser(userId);
     const fullName = user.fullName || user.firstName || "Unknown";
     const imageUrl = user.imageUrl;
     const emailAddress = user.emailAddresses[0].emailAddress;
 
     req.db.query("SELECT * FROM users WHERE userId = ?", [userId], async (err, result) => {
-      if (err) return next(err);
+      if (err) {
+        console.error("Error querying users table:", err);
+        return next(err);
+      }
 
       const role = "user";
 
       if (result.length === 0) {
-        // Insert into users table if not exists
+        // Insert into users table if user doesn't exist
         await new Promise((resolve, reject) => {
           req.db.query(
             "INSERT INTO users SET ?",
             { userId, role, fullName, imageUrl, emailAddress },
             (err, insertResult) => {
-              if (err) return reject(err);
+              if (err) {
+                console.error("Error inserting into users table:", err);
+                return reject(err);
+              }
               resolve(insertResult);
             },
           );
@@ -37,7 +44,10 @@ router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
       const upsert = (tableName, data) => {
         return new Promise((resolve, reject) => {
           req.db.query(`SELECT * FROM ${tableName} WHERE userId = ?`, [userId], (err, result) => {
-            if (err) return reject(err);
+            if (err) {
+              console.error(`Error querying table ${tableName}:`, err);
+              return reject(err);
+            }
 
             if (result.length === 0) {
               // If userId doesn't exist, insert a new record
@@ -45,12 +55,15 @@ router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
                 `INSERT INTO ${tableName} SET ?`,
                 { userId, ...data },
                 (err, insertResult) => {
-                  if (err) return reject(err);
+                  if (err) {
+                    console.error(`Error inserting into table ${tableName}:`, err);
+                    return reject(err);
+                  }
                   resolve(insertResult);
                 },
               );
             } else {
-              resolve();
+              resolve(); // No need to update
             }
           });
         });
@@ -58,7 +71,7 @@ router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
 
       // Data to upsert for each table (update only fields without default values)
       const personalInfoData = {
-        fullName: "fullName",
+        fullName: fullName,
         phoneNumber: "1234567890",
         emailAddress: emailAddress,
         city: "City",
@@ -102,6 +115,7 @@ router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
 
       // Fetch and return user data
       const existingUser = result[0] || { userId, role, fullName, imageUrl, emailAddress };
+
       res.json({
         userId: existingUser.userId,
         role: existingUser.role,
@@ -111,6 +125,7 @@ router.get("/user-data", ClerkExpressRequireAuth(), async (req, res, next) => {
       });
     });
   } catch (err) {
+    console.error("Error in /user-data route:", err);
     next(err);
   }
 });
