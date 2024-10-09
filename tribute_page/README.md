@@ -21,18 +21,22 @@ This project is a simple React application built with TypeScript that presents t
 
 2. Navigate to the project directory:
 
-  ```bash
-    cd CODSOFT/tribute_page
-  ```
+```bash
+  cd CODSOFT/tribute_page
+```
 
 3. Install dependencies:
 
-  ```
-    pnpm install
-  ```
+```
+  pnpm install
+```
 
-4. Start the app:
+## Usage
 
-  ```
-  pnpm dev
-  ```
+```
+pnpm dev
+```
+
+# Acknowledgments
+
+This project was developed as part of the internship from CODSOFT by Sisekelo Ngcobo
