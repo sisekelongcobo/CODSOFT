@@ -1,5 +1,4 @@
 import { useUser } from "@clerk/clerk-react";
-import AddIcon from "@mui/icons-material/Add";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   Box,
@@ -310,7 +309,7 @@ export const EditJobDetails: React.FC = () => {
                     variant="contained"
                     color="primary"
                     onClick={handleAddResponsibility}
-                    startIcon={<AddIcon />}
+                    startIcon={<AddCircleOutlineIcon />}
                     sx={{ mt: 1, color: "white" }}
                   >
                     Add Responsibility

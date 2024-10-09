@@ -268,9 +268,11 @@ export const UserProfileForm: React.FC = () => {
       });
 
       if (response.ok) {
-        // const data = await response.json();
         sendEmailNotificationNewApplicant();
         sendEmailNotificationApplicationSent();
+        setTimeout(() => {
+          navigate(-1);
+        }, 2000);
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message);

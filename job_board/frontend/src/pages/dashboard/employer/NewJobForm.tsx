@@ -31,6 +31,18 @@ export const NewJobForm = () => {
     responsibilities: [""],
     requirements: [""],
   });
+  const [error, setError] = useState<{
+    title?: string;
+    company?: string;
+    location?: string;
+    jobTpye?: string;
+    workMode?: string;
+    companyDescription?: string;
+    roleDescription?: string;
+    jobDescription?: string;
+    responsibilities?: string;
+    requirements?: string;
+  }>({});
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { user } = useClerk();
   const userId = user?.id;
@@ -70,6 +82,63 @@ export const NewJobForm = () => {
   };
 
   const handleSubmit = () => {
+    const validationErrors: {
+      title?: string;
+      company?: string;
+      location?: string;
+      jobType?: string;
+      workMode?: string;
+      companyDescription?: string;
+      roleDescription?: string;
+      jobDescription?: string;
+      responsibilities?: string;
+      requirements?: string;
+    } = {};
+    if (!jobData.title) {
+      validationErrors.title = "Title is required";
+    }
+
+    if (!jobData.company) {
+      validationErrors.company = "Company is required";
+    }
+
+    if (!jobData.location) {
+      validationErrors.location = "Location is required";
+    }
+
+    if (!jobData.jobType) {
+      validationErrors.jobType = "Job Type is required";
+    }
+
+    if (!jobData.workMode) {
+      validationErrors.workMode = "Work Mode is required";
+    }
+
+    if (!jobData.companyDescription) {
+      validationErrors.companyDescription = "Company Description is required";
+    }
+
+    if (!jobData.roleDescription) {
+      validationErrors.roleDescription = "Role Description is required";
+    }
+
+    if (!jobData.jobDescription) {
+      validationErrors.jobDescription = "Job Description is required";
+    }
+
+    if (jobData.responsibilities.includes("")) {
+      validationErrors.responsibilities = "Responsibilities cannot be empty";
+    }
+
+    if (jobData.requirements.includes("")) {
+      validationErrors.requirements = "Requirements cannot be empty";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+
     try {
       const url = import.meta.env.VITE_API_URL + `/jobs/create-job?userId=${userId}`;
       fetch(url, {
@@ -85,7 +154,12 @@ export const NewJobForm = () => {
           console.log(data);
         })
         .catch((error) => console.error("Error creating job:", error));
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error creating job:", error);
+    }
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1000);
   };
 
   return (
@@ -106,6 +180,8 @@ export const NewJobForm = () => {
                 value={jobData.title}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!error.title}
+                helperText={error.title}
               />
             </Grid>
 
@@ -117,6 +193,8 @@ export const NewJobForm = () => {
                 value={jobData.company}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!error.company}
+                helperText={error.company}
               />
             </Grid>
 
@@ -128,6 +206,8 @@ export const NewJobForm = () => {
                 value={jobData.location}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!error.location}
+                helperText={error.location}
               />
             </Grid>
 
@@ -178,6 +258,8 @@ export const NewJobForm = () => {
                 value={jobData.companyDescription}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!error.companyDescription}
+                helperText={error.companyDescription}
                 multiline
                 rows={4}
               />
@@ -190,6 +272,8 @@ export const NewJobForm = () => {
                 name="roleDescription"
                 value={jobData.roleDescription}
                 onChange={handleChange}
+                error={!!error.roleDescription}
+                helperText={error.roleDescription}
                 variant="outlined"
                 multiline
                 rows={4}
@@ -203,6 +287,8 @@ export const NewJobForm = () => {
                 name="jobDescription"
                 value={jobData.jobDescription}
                 onChange={handleChange}
+                error={!!error.jobDescription}
+                helperText={error.jobDescription}
                 variant="outlined"
                 multiline
                 rows={4}
@@ -218,6 +304,8 @@ export const NewJobForm = () => {
                   fullWidth
                   label={`Responsibility ${index + 1}`}
                   value={responsibility}
+                  error={!!error.responsibilities}
+                  helperText={error.responsibilities}
                   // @ts-ignore
                   onChange={(e) => handleArrayChange(index, e, "responsibilities")}
                   variant="outlined"
@@ -243,6 +331,8 @@ export const NewJobForm = () => {
                   fullWidth
                   label={`Requirement ${index + 1}`}
                   value={requirement}
+                  error={!!error.requirements}
+                  helperText={error.requirements}
                   //@ts-ignore
                   onChange={(e) => handleArrayChange(index, e, "requirements")}
                   variant="outlined"
