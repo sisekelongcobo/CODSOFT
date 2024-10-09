@@ -9,11 +9,12 @@ const jobsPerPage = 6;
 export const JobListingsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postedJobs, setPostedJobs] = useState<Job[]>();
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>();
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = postedJobs?.slice(indexOfFirstJob, indexOfLastJob);
-  let jobCount = postedJobs?.length ?? 0;
+  const currentJobs = filteredJobs?.slice(indexOfFirstJob, indexOfLastJob);
+  let jobCount = filteredJobs?.length ?? 0;
 
   //@ts-ignore
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -32,6 +33,7 @@ export const JobListingsPage: React.FC = () => {
       .then((response) => response.json())
       .then((data) => {
         setPostedJobs(data);
+        setFilteredJobs(data);
       })
       .catch((error) => console.error("Error fetching user data:", error));
   };
@@ -40,6 +42,18 @@ export const JobListingsPage: React.FC = () => {
     fetchJobs();
   }, []);
 
+  const handleSearch = (query: string) => {
+    if (query === "") {
+      setFilteredJobs(postedJobs);
+    } else {
+      const filtered = postedJobs?.filter((job) =>
+        job.title.toLowerCase().includes(query.toLowerCase()),
+      );
+      setFilteredJobs(filtered);
+      setCurrentPage(1);
+    }
+  };
+
   return (
     <>
       <Container sx={{ mt: 4 }}>
@@ -47,7 +61,7 @@ export const JobListingsPage: React.FC = () => {
           Job Listings
         </Typography>
         <Box sx={{ mb: 4 }}>
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </Box>
 
         <Grid container spacing={4}>
