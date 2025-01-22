@@ -6,7 +6,7 @@ import routes from "./routes/index.js";
 const app = express();
 
 const corsOptions = {
-  origin: '*',
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 };
 
